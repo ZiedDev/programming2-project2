@@ -25,6 +25,10 @@ public abstract class Employee {
 
     public abstract String getEmployeeType();
 
+    public String getID() {
+        return this.ID;
+    }
+
     public String getFullName() {
         return this.fullName;
     }
@@ -55,5 +59,17 @@ public abstract class Employee {
 
     public void setPosition(String position) {
         this.position = position;
+    }
+
+    @Override
+    public String toString() {
+        return """
+                ID: %s
+                Name: %s
+                Department: %s
+                Position: %s
+                Age: %d
+                Monthly Salary: %.2f""".formatted(
+                this.ID, this.fullName, this.department, this.position, this.age, this.getMonthlySalary());
     }
 }
