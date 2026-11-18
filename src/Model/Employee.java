@@ -1,8 +1,11 @@
 package Model;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-public abstract class Employee {
+public abstract class Employee implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private String ID; // NOTE: Discuss if needs to be int and can be manual
     private String fullName;
     private Department department;
