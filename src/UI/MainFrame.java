@@ -18,19 +18,19 @@ public class MainFrame extends JFrame {
         this.setTitle("App Title");
         this.setResizable(false);
         this.setSize(1024, 768 );
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLocationRelativeTo(null);
-        this.setVisible(true);
 
         cardLayout = new CardLayout();
         container = new JPanel(cardLayout);
 
         // Adding sub-pages to the container
-        container.add(new HomePage(this), HOME);
-        container.add(new PageOne(this), PAGE_1);
-        container.add(new PageTwo(this), PAGE_2);
+        container.add(new HomePage(this::switchPage), HOME);
+        container.add(new PageOne(this::switchPage), PAGE_1);
+        container.add(new PageTwo(this::switchPage), PAGE_2);
 
         this.setContentPane(container);
+        this.setVisible(true);
     }
 
     public void switchPage(String pageName) {
