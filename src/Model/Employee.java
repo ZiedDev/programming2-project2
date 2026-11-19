@@ -6,7 +6,7 @@ import java.util.UUID;
 public abstract class Employee implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String ID; // NOTE: Discuss if needs to be int and can be manual
+    private String ID;
     private String fullName;
     private Department department;
     private int age;
