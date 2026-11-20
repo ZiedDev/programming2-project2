@@ -4,6 +4,8 @@ import UI.home.HomePage;
 import UI.Employees.EmployeesPage;
 import UI.Departments.DepartmentsPage;
 
+import static UI.UITheme.*;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -65,9 +67,9 @@ public class MainFrame extends JFrame {
         sidebar.add(Box.createRigidArea(new Dimension(0, 32)));
 
         // Navigation Buttons
-        homeBtn = ComponentFactory.createSidebarButton("Home");
-        employeesBtn = ComponentFactory.createSidebarButton("Employees");
-        departmentsBtn = ComponentFactory.createSidebarButton("Departments");
+        homeBtn = ComponentFactory.createSidebarButton("Home", AppIcon.HOME);
+        employeesBtn = ComponentFactory.createSidebarButton("Employees", AppIcon.EMPLOYEE);
+        departmentsBtn = ComponentFactory.createSidebarButton("Departments", AppIcon.DEPARTMENT);
 
         homeBtn.addActionListener(e -> this.switchPage(HOME));
         employeesBtn.addActionListener(e -> this.switchPage(EMPLOYEES));
@@ -81,11 +83,11 @@ public class MainFrame extends JFrame {
 
         sidebar.add(Box.createVerticalGlue()); // creates an empty area to push (Log out & Exit) to the bottom
 
-        JButton logoutBtn = ComponentFactory.createSecondaryButton("Log out");
+        JButton logoutBtn = ComponentFactory.createSecondaryButton("Log out", AppIcon.LOGOUT);
         logoutBtn.setHorizontalAlignment(SwingConstants.LEFT);
         logoutBtn.addActionListener(e -> {});
 
-        JButton exitBtn = ComponentFactory.createDangerButton("Exit");
+        JButton exitBtn = ComponentFactory.createDangerButton("Exit", AppIcon.CANCEL, IconColor.DANGER);
         exitBtn.setHorizontalAlignment(SwingConstants.LEFT);
         exitBtn.addActionListener(e -> System.exit(0));
 
