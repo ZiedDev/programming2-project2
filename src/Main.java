@@ -4,9 +4,9 @@ import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
-        // This is just to make ui elements match system look and feel
+        // This is just to make ui elements match a universal look and feel
         try {
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
         } catch (Exception ignored) {}
 
         new MainFrame();

@@ -15,11 +15,11 @@ public class HomePage extends JPanel {
         title.setFont(new Font("SansSerif", Font.BOLD, 22));
 
         JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 12, 0));
-        JButton page1Btn = new JButton("Open Page 1");  
+        JButton page1Btn = new JButton("Open Page 1");
         JButton page2Btn = new JButton("Open Page 2");
 
-        page1Btn.addActionListener(e -> navigate.accept(MainFrame.PAGE_1));
-        page2Btn.addActionListener(e -> navigate.accept(MainFrame.PAGE_2));
+        page1Btn.addActionListener(e -> navigate.accept(MainFrame.EMPLOYEES));
+        page2Btn.addActionListener(e -> navigate.accept(MainFrame.DEPARTMENTS));
 
         buttonRow.add(page1Btn);
         buttonRow.add(page2Btn);

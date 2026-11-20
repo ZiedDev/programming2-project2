@@ -75,4 +75,8 @@ public abstract class Employee implements Serializable {
                 Monthly Salary: %.2f""".formatted(
                 this.ID, this.fullName, this.department, this.position, this.age, this.getMonthlySalary());
     }
+
+    public void validateTypeSpecificFields() {
+
+    }
 }

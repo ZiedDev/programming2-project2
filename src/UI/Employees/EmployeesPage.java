@@ -1,4 +1,4 @@
-package UI.page1;
+package UI.Employees;
 
 import UI.MainFrame;
 import javax.swing.*;
@@ -6,8 +6,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class PageOne extends JPanel {
-    public PageOne(Consumer<String> navigate) {
+public class EmployeesPage extends JPanel {
+    public EmployeesPage(Consumer<String> navigate) {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(16, 16, 16, 16));
 

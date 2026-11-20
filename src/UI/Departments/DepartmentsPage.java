@@ -1,4 +1,4 @@
-package UI.page2;
+package UI.Departments;
 
 import UI.MainFrame;
 import javax.swing.*;
@@ -6,8 +6,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class PageTwo extends JPanel {
-    public PageTwo(Consumer<String> navigate) {
+public class DepartmentsPage extends JPanel {
+    public DepartmentsPage(Consumer<String> navigate) {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(16, 16, 16, 16));
 
