@@ -11,24 +11,21 @@ import Model.PartTimeEmployee;
 import Service.EmployeeService;
 import Model.Department;
 import java.util.List;
-import java.util.ArrayList;
-import UI.UITheme.*;
-import javax.swing.table.DefaultTableModel;
+import UI.ComponentFactory;
 
 public class EmployeesPage extends JPanel {
     public EmployeesPage(Consumer<String> navigate) {
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(16, 16, 16, 16));
 
-
         EmployeeService employeeService = new EmployeeService();
-        //* FOR TESTING
+        // * FOR TESTING
         Department cs = new Department("CS");
         Department it = new Department("IT");
         employeeService.addEmployee(new FullTimeEmployee("Mohamed", cs, 18, "CEO", 1000.0, 500.0));
         employeeService.addEmployee(new PartTimeEmployee("Ahmed", it, 7, "slave", 1.5, 80));
         List<Employee> employees = employeeService.getAllEmployees();
-        //*
+        // *
         EmployeesTable table = new EmployeesTable();
         table.model.loadEmployees(employees);
 
@@ -41,8 +38,13 @@ public class EmployeesPage extends JPanel {
         JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         bottom.add(backBtn);
 
-        //JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JPanel top = new JPanel(new GridLayout(1, 2, 10, 0));
+        top.add(ComponentFactory.createInputField("Name", 10, newValue -> {
+            table.model.loadEmployees(employeeService.searchByName(newValue));
+        }));
+
         add(bottom, BorderLayout.SOUTH);
+        add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);
     }
 }

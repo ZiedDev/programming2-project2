@@ -32,7 +32,8 @@ public class EmployeeService {
     public List<Employee> searchByName(String nameQuery) {
         List<Employee> result = new ArrayList<>();
         if (nameQuery == null || nameQuery.trim().isEmpty()) {
-            return result;
+            //return result;
+            return getAllEmployees();
         }
         String normalizedQuery = nameQuery.trim().toLowerCase();
         for (Employee emp : this.employees) {
@@ -46,7 +47,8 @@ public class EmployeeService {
     public List<Employee> filterByDepartment(String departmentName) {
         List<Employee> result = new ArrayList<>();
         if (departmentName == null || departmentName.trim().isEmpty()) {
-            return result;
+            //return result;
+            return getAllEmployees();
         }
         String normalizedDept = departmentName.trim().toLowerCase();
         for (Employee emp : this.employees) {

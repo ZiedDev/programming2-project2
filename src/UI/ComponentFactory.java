@@ -7,6 +7,8 @@ import javax.smartcardio.Card;
 import javax.swing.*;
 import java.awt.*;
 
+import java.util.function.Consumer;
+
 public class ComponentFactory {
     private static final int ICON_SIZE = 24;
     private static final int BUTTON_HEIGHT = 64;
@@ -60,7 +62,8 @@ public class ComponentFactory {
     }
 
     private static JButton withIcon(JButton btn, AppIcon icon, IconColor color) {
-        if (icon != null && color != null) btn.setIcon(icon.get(color, ICON_SIZE));
+        if (icon != null && color != null)
+            btn.setIcon(icon.get(color, ICON_SIZE));
         return btn;
     }
 
@@ -93,12 +96,15 @@ public class ComponentFactory {
         return createSidebarButton(text, icon, IconColor.ACCENT, IconColor.LIGHT);
     }
 
-    public static JButton createSidebarButton(String text, AppIcon icon, IconColor activeColor, IconColor inactiveColor) {
+    public static JButton createSidebarButton(String text, AppIcon icon, IconColor activeColor,
+            IconColor inactiveColor) {
         JButton btn = createButton(text);
         btn.setHorizontalAlignment(SwingConstants.LEFT);
         if (icon != null) {
-            if (activeColor != null) btn.putClientProperty(ICON_ACTIVE, icon.get(activeColor, ICON_SIZE));
-            if (inactiveColor != null) btn.putClientProperty(ICON_INACTIVE, icon.get(inactiveColor, ICON_SIZE));
+            if (activeColor != null)
+                btn.putClientProperty(ICON_ACTIVE, icon.get(activeColor, ICON_SIZE));
+            if (inactiveColor != null)
+                btn.putClientProperty(ICON_INACTIVE, icon.get(inactiveColor, ICON_SIZE));
         }
         setSidebarButtonActive(btn, false);
         return btn;
@@ -106,7 +112,8 @@ public class ComponentFactory {
 
     // Others
     public static void setSidebarButtonActive(JButton btn, boolean isActive) {
-        if (btn == null) return;
+        if (btn == null)
+            return;
         btn.setBackground(isActive ? UITheme.PRIMARY : UITheme.BG_DARK);
         btn.setForeground(isActive ? UITheme.TEXT_DARK : UITheme.TEXT_LIGHT);
         btn.setFont(isActive ? UITheme.FONT_SUBTITLE : UITheme.FONT_BODY);
@@ -169,7 +176,8 @@ public class ComponentFactory {
     }
 
     public static void setStatCardValue(JPanel card, String value) {
-        if (card == null) return;
+        if (card == null)
+            return;
         JLabel valueLabel = (JLabel) card.getClientProperty(STAT_VALUE);
         if (valueLabel != null) {
             valueLabel.setText(value);
@@ -193,8 +201,7 @@ public class ComponentFactory {
         separator.setOpaque(false);
         separator.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(10, 0, 10, 0),
-                BorderFactory.createMatteBorder(0, 0, 1, 0, color)
-        ));
+                BorderFactory.createMatteBorder(0, 0, 1, 0, color)));
         return separator;
     }
 
@@ -210,8 +217,13 @@ public class ComponentFactory {
         separator.setOpaque(false);
         separator.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createEmptyBorder(0, 10, 0, 0),
-                BorderFactory.createMatteBorder(0, 0, 0, 1, color)
-        ));
+                BorderFactory.createMatteBorder(0, 0, 0, 1, color)));
         return separator;
+    }
+
+    public static InputField createInputField(String initialText, int columns, Consumer<String> onCommit) {
+        InputField field = new InputField(initialText, columns, onCommit);
+
+        return field; // will perhaps need more stuff ?
     }
 }
