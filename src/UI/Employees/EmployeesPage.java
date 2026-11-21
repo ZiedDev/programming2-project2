@@ -1,6 +1,8 @@
 package UI.Employees;
 
 import UI.MainFrame;
+import UI.UITheme.*;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -19,9 +21,11 @@ public class EmployeesPage extends JPanel {
         EmployeeService employeeService = new EmployeeService();
         DepartmentService deptService = new DepartmentService();
         // * FOR TESTING
-        //Department cs = deptService.addDepartment("CS");
-        //employeeService.addEmployee(new FullTimeEmployee("Mohamed", cs, 18, "CEO", 1000.0, 500.0));
-        //employeeService.addEmployee(new PartTimeEmployee("Ahmed", it, 7, "slave", 1.5, 80));
+        // Department cs = deptService.addDepartment("CS");
+        // employeeService.addEmployee(new FullTimeEmployee("Mohamed", cs, 18, "CEO",
+        // 1000.0, 500.0));
+        // employeeService.addEmployee(new PartTimeEmployee("Ahmed", it, 7, "slave",
+        // 1.5, 80));
         List<Employee> employees = employeeService.getAllEmployees();
         // *
         EmployeesTable table = new EmployeesTable();
@@ -33,8 +37,9 @@ public class EmployeesPage extends JPanel {
         JButton backBtn = new JButton("Back to Main");
         backBtn.addActionListener(e -> navigate.accept(MainFrame.HOME));
 
-        JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        bottom.add(backBtn);
+        // JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        JButton addBtn = ComponentFactory.createPrimaryButton("Add New Employee", AppIcon.ADD, IconColor.ACCENT);
+        addBtn.setHorizontalAlignment(SwingConstants.LEFT);
 
         JPanel top = new JPanel(new GridLayout(1, 2, 10, 0));
         top.add(ComponentFactory.createInputField("Name", 10, newValue -> {
@@ -44,7 +49,9 @@ public class EmployeesPage extends JPanel {
         top.add(ComponentFactory.createComboBox(deptService.getAllDepartments().toArray(), newValue -> {
             table.model.loadEmployees(employeeService.filterByDepartment(newValue));
         }));
-        add(bottom, BorderLayout.SOUTH);
+
+        add(addBtn, BorderLayout.SOUTH);
+
         add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);
     }
