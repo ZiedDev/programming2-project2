@@ -13,6 +13,8 @@ import java.util.List;
 import UI.ComponentFactory;
 import Service.DepartmentService;
 
+import UI.Popup;
+
 public class EmployeesPage extends JPanel {
     public EmployeesPage(Consumer<String> navigate) {
         setLayout(new BorderLayout(10, 10));
@@ -50,6 +52,9 @@ public class EmployeesPage extends JPanel {
             table.model.loadEmployees(employeeService.filterByDepartment(newValue));
         }));
 
+        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
+        Popup x = ComponentFactory.createPopup("Add new employee",parentFrame);
+        addBtn.addActionListener(e -> x.showPopup(parentFrame));
         add(addBtn, BorderLayout.SOUTH);
 
         add(top, BorderLayout.NORTH);

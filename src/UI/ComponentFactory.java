@@ -8,6 +8,7 @@ import java.awt.*;
 import java.util.concurrent.Flow;
 import java.util.function.Consumer;
 import java.awt.event.ActionListener;
+
 public class ComponentFactory {
     private static final int ICON_SIZE = 24;
     private static final int BUTTON_HEIGHT = 64;
@@ -222,8 +223,24 @@ public class ComponentFactory {
 
     public static InputField createInputField(String initialText, int columns, Consumer<String> onCommit) {
         InputField field = new InputField(initialText, columns, onCommit);
-
+        // field.setBackground(UITheme.BG_BASE);
         return field; // will perhaps need more stuff ?
+    }
+
+    public static JPanel createInputField(String desc, String initialText, int columns, Consumer<String> onCommit) {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 10));
+        panel.setBackground(UITheme.BG_DARK);
+
+        JLabel label = new JLabel(desc);
+        label.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        label.setFont(UITheme.FONT_BODY);
+        label.setForeground(UITheme.TEXT_LIGHT);
+        InputField inputField = createInputField(initialText, columns, onCommit);
+        inputField.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        panel.add(label);
+        panel.add(inputField);
+        return panel;
     }
 
     public static JComboBox<String> createComboBox(Object[] options, Consumer<String> onChange) {
@@ -238,5 +255,10 @@ public class ComponentFactory {
         });
 
         return comboBox;
+    }
+
+    public static Popup createPopup(String title, JFrame parent) {
+        Popup x = new Popup(title, parent);
+        return x;
     }
 }
