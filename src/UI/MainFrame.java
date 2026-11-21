@@ -24,7 +24,6 @@ public class MainFrame extends JFrame {
 
     public MainFrame() {
         this.setTitle("Employees Management Portal");
-        // this.setResizable(false);
         this.setResizable(true);
         this.setSize(1024, 768);
 
@@ -59,12 +58,23 @@ public class MainFrame extends JFrame {
         sidebar.setBorder(new EmptyBorder(24, 16, 24, 16));
 
         // Portal Title
-        JLabel title = new JLabel("Portal");
+        JLabel title = new JLabel("Employees");
         title.setFont(UITheme.FONT_TITLE);
         title.setForeground(UITheme.TEXT_LIGHT);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel title2 = new JLabel("Management");
+        title2.setFont(UITheme.FONT_TITLE);
+        title2.setForeground(UITheme.TEXT_LIGHT);
+        title2.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel title3 = new JLabel("Portal");
+        title3.setFont(UITheme.FONT_TITLE);
+        title3.setForeground(UITheme.TEXT_LIGHT);
+        title3.setAlignmentX(Component.CENTER_ALIGNMENT);
         sidebar.add(title);
-        sidebar.add(Box.createRigidArea(new Dimension(0, 32)));
+        sidebar.add(title2);
+        sidebar.add(title3);
+
+        sidebar.add(ComponentFactory.createHorizontalSeparator());
 
         // Navigation Buttons
         homeBtn = ComponentFactory.createSidebarButton("Home", AppIcon.HOME);
@@ -82,6 +92,7 @@ public class MainFrame extends JFrame {
         sidebar.add(departmentsBtn);
 
         sidebar.add(Box.createVerticalGlue()); // creates an empty area to push (Log out & Exit) to the bottom
+        sidebar.add(ComponentFactory.createHorizontalSeparator());
 
         JButton logoutBtn = ComponentFactory.createSecondaryButton("Log out", AppIcon.LOGOUT);
         logoutBtn.setHorizontalAlignment(SwingConstants.LEFT);

@@ -14,7 +14,7 @@ public final class UITheme {
     public static final Font FONT_TITLE    = new Font(FONT_FAMILY, Font.BOLD, 22);
     public static final Font FONT_DISPLAY  = new Font(FONT_FAMILY, Font.BOLD, 32);
     public static final Font FONT_BODY     = new Font(FONT_FAMILY, Font.PLAIN, 15);
-    public static final Font FONT_SUBTITLE = new Font(FONT_FAMILY, Font.BOLD, 15);
+    public static final Font FONT_SUBTITLE = new Font(FONT_FAMILY, Font.BOLD, 20);
 
     // Colors
     public static final Color BG_DARK      = new Color(38, 39, 46);
@@ -63,7 +63,7 @@ public final class UITheme {
         DARK("Dark"),
         LIGHT("Light"),
         ACCENT("Accent"),
-        ACCENT_RED("Accent-Red"),
+        ACCENT_RED("Accent_Red"),
         DANGER("Danger");
 
         private final String folder;

@@ -3,6 +3,7 @@ package UI;
 import UI.UITheme.AppIcon;
 import UI.UITheme.IconColor;
 
+import javax.smartcardio.Card;
 import javax.swing.*;
 import java.awt.*;
 
@@ -96,7 +97,7 @@ public class ComponentFactory {
         JButton btn = createButton(text);
         btn.setHorizontalAlignment(SwingConstants.LEFT);
         if (icon != null) {
-            if (activeColor != null)   btn.putClientProperty(ICON_ACTIVE, icon.get(activeColor, ICON_SIZE));
+            if (activeColor != null) btn.putClientProperty(ICON_ACTIVE, icon.get(activeColor, ICON_SIZE));
             if (inactiveColor != null) btn.putClientProperty(ICON_INACTIVE, icon.get(inactiveColor, ICON_SIZE));
         }
         setSidebarButtonActive(btn, false);
@@ -116,29 +117,101 @@ public class ComponentFactory {
         }
     }
 
-    public static JPanel createStatCard(String title, JLabel valueLabel) {
+    // States Cards
+    private static final String STAT_VALUE = "stat.value";
+
+    public static JPanel createStatCard(String title, String value) {
+        return createStatCard(title, value, null, null);
+    }
+
+    public static JPanel createStatCard(String title, int value) {
+        return createStatCard(title, String.valueOf(value), null, null);
+    }
+
+    public static JPanel createStatCard(String title, String value, AppIcon icon) {
+        return createStatCard(title, value, icon, IconColor.DARK);
+    }
+
+    public static JPanel createStatCard(String title, int value, AppIcon icon) {
+        return createStatCard(title, String.valueOf(value), icon, IconColor.DARK);
+    }
+
+    public static JPanel createStatCard(String title, String value, AppIcon icon, IconColor color) {
         JPanel card = new JPanel(new BorderLayout(0, 10));
         card.setBackground(UITheme.SURFACE_BASE);
         card.setBorder(BorderFactory.createEmptyBorder(18, 20, 18, 20));
 
-        JLabel titleLabel = new JLabel(title, SwingConstants.CENTER);
-        titleLabel.setFont(UITheme.FONT_BODY);
+        JPanel CardHeader = new JPanel();
+        CardHeader.setLayout(new BoxLayout(CardHeader, BoxLayout.Y_AXIS));
+        CardHeader.setOpaque(false);
+        JLabel titleLabel = new JLabel(title);
+        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        titleLabel.setFont(UITheme.FONT_SUBTITLE.deriveFont(Font.BOLD));
         titleLabel.setForeground(UITheme.TEXT_DARK);
+        if (icon != null && color != null) {
+            titleLabel.setIcon(icon.get(color, ICON_SIZE));
+            titleLabel.setIconTextGap(8);
+        }
+        CardHeader.add(titleLabel);
 
-        valueLabel.setFont(UITheme.FONT_DISPLAY);
+        JPanel separator = createHorizontalSeparator();
+        separator.setAlignmentX(Component.LEFT_ALIGNMENT);
+        CardHeader.add(separator);
+
+        JLabel valueLabel = new JLabel(value, SwingConstants.CENTER);
+        valueLabel.setFont(UITheme.FONT_DISPLAY.deriveFont(Font.BOLD));
         valueLabel.setForeground(UITheme.TEXT_DARK);
-        valueLabel.setHorizontalAlignment(SwingConstants.CENTER);
 
-        card.add(titleLabel, BorderLayout.NORTH);
+        card.putClientProperty(STAT_VALUE, valueLabel);
+        card.add(CardHeader, BorderLayout.NORTH);
         card.add(valueLabel, BorderLayout.CENTER);
         return card;
     }
 
-    public static JLabel createSectionTitle(String text) {
-        JLabel label = new JLabel(text);
-        label.setFont(UITheme.FONT_BODY);
-        label.setForeground(UITheme.TEXT_LIGHT);
-        label.setBorder(BorderFactory.createEmptyBorder(15, 0, 8, 0));
-        return label;
+    public static void setStatCardValue(JPanel card, String value) {
+        if (card == null) return;
+        JLabel valueLabel = (JLabel) card.getClientProperty(STAT_VALUE);
+        if (valueLabel != null) {
+            valueLabel.setText(value);
+        }
+    }
+
+    public static void setStatCardValue(JPanel card, int value) {
+        setStatCardValue(card, String.valueOf(value));
+    }
+
+    // Separator
+    public static JPanel createHorizontalSeparator() {
+        return createHorizontalSeparator(UITheme.BORDER);
+    }
+
+    public static JPanel createHorizontalSeparator(Color color) {
+        JPanel separator = new JPanel();
+        separator.setMaximumSize(new Dimension(Integer.MAX_VALUE, 22));
+        separator.setPreferredSize(new Dimension(0, 22));
+        separator.setAlignmentX(Component.CENTER_ALIGNMENT);
+        separator.setOpaque(false);
+        separator.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(10, 0, 10, 0),
+                BorderFactory.createMatteBorder(0, 0, 1, 0, color)
+        ));
+        return separator;
+    }
+
+    public static JPanel createVerticalSeparator() {
+        return createVerticalSeparator(UITheme.BORDER);
+    }
+
+    public static JPanel createVerticalSeparator(Color color) {
+        JPanel separator = new JPanel();
+        separator.setMaximumSize(new Dimension(12, Integer.MAX_VALUE));
+        separator.setPreferredSize(new Dimension(12, 0));
+        separator.setAlignmentY(Component.CENTER_ALIGNMENT);
+        separator.setOpaque(false);
+        separator.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createEmptyBorder(0, 10, 0, 0),
+                BorderFactory.createMatteBorder(0, 0, 0, 1, color)
+        ));
+        return separator;
     }
 }
