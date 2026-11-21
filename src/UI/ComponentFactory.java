@@ -3,7 +3,6 @@ package UI;
 import UI.UITheme.AppIcon;
 import UI.UITheme.IconColor;
 
-import javax.smartcardio.Card;
 import javax.swing.*;
 import java.awt.*;
 
@@ -227,7 +226,7 @@ public class ComponentFactory {
         return field; // will perhaps need more stuff ?
     }
 
-    public static JComboBox createComboBox(Object[] options, Consumer<String> onChange) {
+    public static JComboBox<String> createComboBox(Object[] options, Consumer<String> onChange) {
         JComboBox<String> comboBox = new JComboBox<>();
         for (Object x : options) {
             comboBox.addItem(x.toString());
