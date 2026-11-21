@@ -12,6 +12,7 @@ import Service.EmployeeService;
 import Model.Department;
 import java.util.List;
 import UI.ComponentFactory;
+import Service.DepartmentService;
 
 public class EmployeesPage extends JPanel {
     public EmployeesPage(Consumer<String> navigate) {
@@ -19,11 +20,11 @@ public class EmployeesPage extends JPanel {
         setBorder(new EmptyBorder(16, 16, 16, 16));
 
         EmployeeService employeeService = new EmployeeService();
+        DepartmentService deptService = new DepartmentService();
         // * FOR TESTING
-        Department cs = new Department("CS");
-        Department it = new Department("IT");
-        employeeService.addEmployee(new FullTimeEmployee("Mohamed", cs, 18, "CEO", 1000.0, 500.0));
-        employeeService.addEmployee(new PartTimeEmployee("Ahmed", it, 7, "slave", 1.5, 80));
+        //Department cs = deptService.addDepartment("CS");
+        //employeeService.addEmployee(new FullTimeEmployee("Mohamed", cs, 18, "CEO", 1000.0, 500.0));
+        //employeeService.addEmployee(new PartTimeEmployee("Ahmed", it, 7, "slave", 1.5, 80));
         List<Employee> employees = employeeService.getAllEmployees();
         // *
         EmployeesTable table = new EmployeesTable();
@@ -43,6 +44,9 @@ public class EmployeesPage extends JPanel {
             table.model.loadEmployees(employeeService.searchByName(newValue));
         }));
 
+        top.add(ComponentFactory.createComboBox(deptService.getAllDepartments().toArray(), newValue -> {
+            table.model.loadEmployees(employeeService.filterByDepartment(newValue));
+        }));
         add(bottom, BorderLayout.SOUTH);
         add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);

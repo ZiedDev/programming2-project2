@@ -226,4 +226,18 @@ public class ComponentFactory {
 
         return field; // will perhaps need more stuff ?
     }
+
+    public static JComboBox createComboBox(Object[] options, Consumer<String> onChange) {
+        JComboBox<String> comboBox = new JComboBox<>();
+        for (Object x : options) {
+            comboBox.addItem(x.toString());
+        }
+
+        comboBox.addActionListener(e -> {
+            String selected = (String) comboBox.getSelectedItem();
+            onChange.accept(selected);
+        });
+
+        return comboBox;
+    }
 }
