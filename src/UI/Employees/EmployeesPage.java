@@ -53,7 +53,7 @@ public class EmployeesPage extends JPanel {
         }));
 
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        Popup x = ComponentFactory.createPopup("Add new employee",parentFrame);
+        Popup x = ComponentFactory.createInputsPopup(new String[] { "Name", "Age" }, "Add new employee", parentFrame); //example usage
         addBtn.addActionListener(e -> x.showPopup(parentFrame));
         add(addBtn, BorderLayout.SOUTH);
 

@@ -13,7 +13,7 @@ public class InputField extends JTextField {
         this.onCommit = onCommit;
 
         this.addActionListener(e->commit());
-
+    
         this.addFocusListener(new FocusAdapter() {
             @Override 
             public void focusLost(FocusEvent e){
@@ -28,6 +28,9 @@ public class InputField extends JTextField {
             lastValue = current;
             onCommit.accept(current);
         }
+    }
+    public String getValue(){
+        return lastValue;
     }
 
 }
