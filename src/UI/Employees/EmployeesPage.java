@@ -7,13 +7,18 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.function.Consumer;
+
+import Model.Department;
 import Model.Employee;
+import Model.FullTimeEmployee;
 import Service.EmployeeService;
 import java.util.List;
 import UI.ComponentFactory;
 import Service.DepartmentService;
 
 import UI.Popup;
+
+import UI.MultipleInputField;
 
 public class EmployeesPage extends JPanel {
     public EmployeesPage(Consumer<String> navigate) {
@@ -53,11 +58,37 @@ public class EmployeesPage extends JPanel {
         }));
 
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        Popup x = ComponentFactory.createInputsPopup(new String[] { "Name", "Age" }, "Add new employee", parentFrame); //example usage
-        addBtn.addActionListener(e -> x.showPopup(parentFrame));
+        MultipleInputField fields = ComponentFactory.createMultipleInputsPanel(new String[] { "Name", "Age" });
+
+        Popup popUp = ComponentFactory.createPopup("Add new employee", parentFrame); // example // usage
+        popUp.addBodyComponent(fields);
+
+        popUp.addBodyComponent(
+                ComponentFactory.createComboBoxPanelDesc("department", deptService.getAllDepartments().toArray(),
+                        newValue -> {
+                            // TODO ADD LOGIC
+                        }));
+
+        popUp.addBodyComponent(
+                ComponentFactory.createComboBoxPanelDesc("Type", employeeService.getEmployeeTypes(), newValue -> {
+                    // TODO ADD LOGIC
+                }));
+
+        JButton addDialogBtn = ComponentFactory.createPrimaryButton("Add Employee", AppIcon.ADD, IconColor.ACCENT);
+        popUp.addFooterComponent(addDialogBtn);
+        addDialogBtn.setHorizontalAlignment(SwingConstants.LEFT);
+        addDialogBtn.addActionListener(e -> employeeService.addEmployee(makeEmployee(fields)));
+
+        addBtn.addActionListener(e -> popUp.showPopup(parentFrame));
         add(addBtn, BorderLayout.SOUTH);
 
         add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);
+    }
+
+    private Employee makeEmployee(MultipleInputField fields) {
+        System.out.println(fields.getValue("Name"));
+        Department cs = new Department("CS"); //TESTING // TODO: REMOVE LATER
+        return new FullTimeEmployee("Mohamed", cs, 18, "CEO", 1000.0, 500.0);//TESTING //TODO: REMOVE LATER
     }
 }

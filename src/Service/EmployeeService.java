@@ -196,4 +196,7 @@ public class EmployeeService {
             throw new RuntimeException("Failed to save employees to file: " + e.getMessage(), e);
         }
     }
+    public String[] getEmployeeTypes(){ // TODO : make this less hard coded
+        return new String[]{"Full-Time","Part-Time"};
+    }
 }

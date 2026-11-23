@@ -18,7 +18,7 @@ public class Popup {
     private JDialog dialog;
     private JPanel panel;
     private JPanel bodyPanel;
-
+    private JPanel footerPanel;
     public Popup(String titleText, JFrame parent) {
         dialog = new JDialog(parent, titleText, true);
 
@@ -52,7 +52,14 @@ public class Popup {
         bodyPanel = new JPanel();
         bodyPanel.setLayout(new BoxLayout(bodyPanel, BoxLayout.Y_AXIS));
         bodyPanel.setOpaque(false);
+        bodyPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         panel.add(bodyPanel, BorderLayout.CENTER);
+
+        footerPanel = new JPanel();
+        footerPanel.setOpaque(false);
+        footerPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        panel.add(footerPanel,BorderLayout.SOUTH);
 
         dialog.add(panel);
 
@@ -65,7 +72,11 @@ public class Popup {
         dialog.setVisible(true);
     }
 
-    public void addComponent(Component c) {
+    public void addBodyComponent(Component c) {
         this.bodyPanel.add(c);
+    }
+
+    public void addFooterComponent(Component c){
+        this.footerPanel.add(c);
     }
 }

@@ -262,24 +262,43 @@ public class ComponentFactory {
         return comboBox;
     }
 
+    public static JPanel createComboBoxPanelDesc(String desc, Object[] options, Consumer<String> onChange) {
+        JPanel panel = new JPanel(new BorderLayout(12, 0));
+        panel.setBackground(UITheme.BG_DARK);
+        panel.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
+        panel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel label = new JLabel(desc);
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
+        label.setFont(UITheme.FONT_BODY);
+        label.setForeground(UITheme.TEXT_LIGHT);
+
+        int inputWidth = new JTextField(20).getPreferredSize().width;
+        JComboBox box = createComboBox(options, onChange);
+        box.setPreferredSize(new Dimension(inputWidth, box.getPreferredSize().height));
+
+        panel.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        panel.add(label, BorderLayout.WEST);
+        panel.add(box, BorderLayout.EAST);
+
+        return panel;
+    }
+
     public static Popup createPopup(String title, JFrame parent) {
         Popup x = new Popup(title, parent);
         return x;
     }
 
-    public static JPanel createMultipleInputsPanel(String[] fields) { // do i really need to wrap it in a jpanel though
-                                                                      // ?
-        JPanel panel = new JPanel();
-        panel.setBackground(UITheme.BG_DARK);
+    public static MultipleInputField createMultipleInputsPanel(String[] fields) { // do i really need to wrap it in a jpanel though
         MultipleInputField field = new MultipleInputField(fields);
         field.setBackground(UITheme.BG_DARK);
-        panel.add(field);
-        return panel;
+        return field;
     }
 
     public static Popup createInputsPopup(String[] fields, String title, JFrame parent) {
         Popup x = createPopup(title, parent);
-        x.addComponent(createMultipleInputsPanel(fields));
+        x.addBodyComponent(createMultipleInputsPanel(fields));
         return x;
     }
 }
