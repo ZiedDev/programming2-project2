@@ -18,8 +18,6 @@ import Service.DepartmentService;
 
 import UI.Popup;
 
-import UI.MultipleInputField;
-
 public class EmployeesPage extends JPanel {
     public EmployeesPage(Consumer<String> navigate) {
         setLayout(new BorderLayout(10, 10));
@@ -56,7 +54,7 @@ public class EmployeesPage extends JPanel {
         top.add(ComponentFactory.createComboBox(deptService.getAllDepartments().toArray(), newValue -> {
             table.model.loadEmployees(employeeService.filterByDepartment(newValue));
         }));
-
+// TODO: make popup instantiated instead of created once + dispose on close
         JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
         MultipleInputField fields = ComponentFactory.createMultipleInputsPanel(new String[] { "Name", "Age" });
 
@@ -67,17 +65,20 @@ public class EmployeesPage extends JPanel {
                 ComponentFactory.createComboBoxPanelDesc("department", deptService.getAllDepartments().toArray(),
                         newValue -> {
                             // TODO ADD LOGIC
+                            System.err.println("HELLO");
+                            popUp.addBodyComponent(
+                                    ComponentFactory.createComboBoxPanelDesc("Type", employeeService.getEmployeeTypes(),
+                                            newValue2 -> {
+                                                // TODO ADD LOGIC
+                                            }));
+                            popUp.showPopup(parentFrame);
                         }));
-
-        popUp.addBodyComponent(
-                ComponentFactory.createComboBoxPanelDesc("Type", employeeService.getEmployeeTypes(), newValue -> {
-                    // TODO ADD LOGIC
-                }));
 
         JButton addDialogBtn = ComponentFactory.createPrimaryButton("Add Employee", AppIcon.ADD, IconColor.ACCENT);
         popUp.addFooterComponent(addDialogBtn);
         addDialogBtn.setHorizontalAlignment(SwingConstants.LEFT);
         addDialogBtn.addActionListener(e -> employeeService.addEmployee(makeEmployee(fields)));
+        popUp.showPopup(parentFrame);
 
         addBtn.addActionListener(e -> popUp.showPopup(parentFrame));
         add(addBtn, BorderLayout.SOUTH);
@@ -88,7 +89,7 @@ public class EmployeesPage extends JPanel {
 
     private Employee makeEmployee(MultipleInputField fields) {
         System.out.println(fields.getValue("Name"));
-        Department cs = new Department("CS"); //TESTING // TODO: REMOVE LATER
-        return new FullTimeEmployee("Mohamed", cs, 18, "CEO", 1000.0, 500.0);//TESTING //TODO: REMOVE LATER
+        Department cs = new Department("CS"); // TESTING // TODO: REMOVE LATER
+        return new FullTimeEmployee("Mohamed", cs, 18, "CEO", 1000.0, 500.0);// TESTING //TODO: REMOVE LATER
     }
 }

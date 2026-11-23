@@ -5,9 +5,7 @@ import UI.UITheme.IconColor;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.concurrent.Flow;
 import java.util.function.Consumer;
-import java.awt.event.ActionListener;
 
 public class ComponentFactory {
     private static final int ICON_SIZE = 24;
@@ -248,21 +246,17 @@ public class ComponentFactory {
         return panel;
     }
 
-    public static JComboBox<String> createComboBox(Object[] options, Consumer<String> onChange) {
-        JComboBox<String> comboBox = new JComboBox<>();
-        for (Object x : options) {
-            comboBox.addItem(x.toString());
-        }
-
+    public static <T> JComboBox<T> createComboBox(T[] options, Consumer<T> onChange) {
+        JComboBox<T> comboBox = new JComboBox<>(options);
         comboBox.addActionListener(e -> {
-            String selected = (String) comboBox.getSelectedItem();
-            onChange.accept(selected);
+            if (onChange != null) {
+                onChange.accept(comboBox.getItemAt(comboBox.getSelectedIndex()));
+            }
         });
-
         return comboBox;
     }
 
-    public static JPanel createComboBoxPanelDesc(String desc, Object[] options, Consumer<String> onChange) {
+    public static <T> JPanel createComboBoxPanelDesc(String desc, T[] options, Consumer<T> onChange) {
         JPanel panel = new JPanel(new BorderLayout(12, 0));
         panel.setBackground(UITheme.BG_DARK);
         panel.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
@@ -274,7 +268,7 @@ public class ComponentFactory {
         label.setForeground(UITheme.TEXT_LIGHT);
 
         int inputWidth = new JTextField(20).getPreferredSize().width;
-        JComboBox box = createComboBox(options, onChange);
+        JComboBox<T> box = createComboBox(options, onChange);
         box.setPreferredSize(new Dimension(inputWidth, box.getPreferredSize().height));
 
         panel.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -287,18 +281,6 @@ public class ComponentFactory {
 
     public static Popup createPopup(String title, JFrame parent) {
         Popup x = new Popup(title, parent);
-        return x;
-    }
-
-    public static MultipleInputField createMultipleInputsPanel(String[] fields) { // do i really need to wrap it in a jpanel though
-        MultipleInputField field = new MultipleInputField(fields);
-        field.setBackground(UITheme.BG_DARK);
-        return field;
-    }
-
-    public static Popup createInputsPopup(String[] fields, String title, JFrame parent) {
-        Popup x = createPopup(title, parent);
-        x.addBodyComponent(createMultipleInputsPanel(fields));
         return x;
     }
 }

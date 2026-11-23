@@ -9,7 +9,6 @@ import java.awt.Component;
 
 import javax.swing.BoxLayout;
 import javax.swing.JDialog;
-import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
 import javax.swing.SwingConstants;
@@ -21,6 +20,7 @@ public class Popup {
     private JPanel footerPanel;
     public Popup(String titleText, JFrame parent) {
         dialog = new JDialog(parent, titleText, true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         panel = new JPanel();
         panel.setBackground(UITheme.BG_DARK);
@@ -70,6 +70,14 @@ public class Popup {
         dialog.pack();
         dialog.setLocationRelativeTo(parent);
         dialog.setVisible(true);
+    }
+
+    public void repack() {
+        dialog.pack();
+    }
+
+    public void close() {
+        dialog.dispose();
     }
 
     public void addBodyComponent(Component c) {

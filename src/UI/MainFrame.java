@@ -48,7 +48,7 @@ public class MainFrame extends JFrame {
         outerRoot.add(appShell, APP);
 
         this.setContentPane(outerRoot);
-        switchPage(LOGIN);
+        switchPage(HOME); // TODO: Change before submission
         this.setVisible(true);
         this.setMinimumSize(new Dimension(1024, 768));
     }
