@@ -278,7 +278,25 @@ public class ComponentFactory {
 
         return panel;
     }
+    
+    public static JPanel createFormRow(String labelText, JComponent control) {
+        JPanel row = new JPanel(new BorderLayout(12, 0));
+        row.setBackground(UITheme.BG_DARK);
+        row.setBorder(BorderFactory.createEmptyBorder(6, 0, 6, 0));
+        row.setAlignmentX(Component.LEFT_ALIGNMENT);
 
+        JLabel label = new JLabel(labelText);
+        label.setFont(UITheme.FONT_BODY);
+        label.setForeground(UITheme.TEXT_LIGHT);
+
+        int controlWidth = new JTextField(20).getPreferredSize().width;
+        control.setPreferredSize(new Dimension(controlWidth, control.getPreferredSize().height));
+
+        row.add(label, BorderLayout.WEST);
+        row.add(control, BorderLayout.EAST);
+        return row;
+    }
+    
     public static Popup createPopup(String title, JFrame parent) {
         Popup x = new Popup(title, parent);
         return x;
