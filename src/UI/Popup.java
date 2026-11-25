@@ -52,7 +52,6 @@ public class Popup {
         headerPanel.add(title);
 
         Divider separator = Divider.horizontal();
-        separator.setAlignmentX(Component.LEFT_ALIGNMENT);
         headerPanel.add(separator);
 
         // remove later

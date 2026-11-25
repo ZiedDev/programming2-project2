@@ -83,5 +83,6 @@ public class EmployeesPage extends AppPage {
 
     // what to update when the page is refreshed
     private void refresh() {
+
     }
 }

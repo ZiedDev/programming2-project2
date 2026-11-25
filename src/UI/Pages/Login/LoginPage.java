@@ -47,30 +47,26 @@ public class LoginPage extends AppPage {
         JLabel titleLabel = new JLabel("Please Login");
         titleLabel.setFont(UITheme.FONT_TITLE);
         titleLabel.setForeground(UITheme.TEXT_LIGHT);
-        titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         Divider separator = Divider.horizontal();
-        separator.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel userLabel = new JLabel("Username");
         userLabel.setFont(UITheme.FONT_BODY);
         userLabel.setForeground(UITheme.TEXT_LIGHT);
-        userLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        userLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JTextField usernameField = new JTextField();
         usernameField.setPreferredSize(new Dimension(320, 36));
         usernameField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
-        usernameField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel passLabel = new JLabel("Password");
         passLabel.setFont(UITheme.FONT_BODY);
         passLabel.setForeground(UITheme.TEXT_LIGHT);
-        passLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        passLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JPasswordField passwordField = new JPasswordField();
         passwordField.setPreferredSize(new Dimension(320, 36));
         passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
-        passwordField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         AppButton loginBtn = AppButton.primary("Login")
                 .icon(AppIcon.LOGIN, IconColor.DARK)
