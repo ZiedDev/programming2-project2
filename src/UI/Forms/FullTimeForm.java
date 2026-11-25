@@ -50,4 +50,9 @@ public class FullTimeForm implements FormBuilder<Employee> {
             throw new IllegalArgumentException("Age, Basic Salary, and Bonus must be valid numbers.");
         }
     }
+
+    @Override
+    public String toString() {
+        return "Full-Time";
+    }
 }

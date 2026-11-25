@@ -50,4 +50,9 @@ public class PartTimeForm implements FormBuilder<Employee> {
             throw new IllegalArgumentException("Age, Hourly Rate, and Hours / Month must be valid numbers.");
         }
     }
+
+    @Override
+    public String toString() {
+        return "Part-Time";
+    }
 }

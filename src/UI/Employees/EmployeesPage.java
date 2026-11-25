@@ -18,6 +18,8 @@ import Service.DepartmentService;
 
 import UI.Popup;
 
+import UI.Forms.*;
+
 public class EmployeesPage extends JPanel {
     public EmployeesPage(Consumer<String> navigate) {
         setLayout(new BorderLayout(10, 10));
@@ -43,53 +45,33 @@ public class EmployeesPage extends JPanel {
         backBtn.addActionListener(e -> navigate.accept(MainFrame.HOME));
 
         // JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
-        JButton addBtn = ComponentFactory.createPrimaryButton("Add New Employee", AppIcon.ADD, IconColor.ACCENT);
-        addBtn.setHorizontalAlignment(SwingConstants.LEFT);
 
         JPanel top = new JPanel(new GridLayout(1, 2, 10, 0));
-        top.add(ComponentFactory.createInputField("Name", 10, newValue -> {
+        top.add(ComponentFactory.createInputField("", 10, newValue -> {
             table.model.loadEmployees(employeeService.searchByName(newValue));
         }));
 
-        top.add(ComponentFactory.createComboBox(deptService.getAllDepartments().toArray(), newValue -> {
-            table.model.loadEmployees(employeeService.filterByDepartment(newValue));
-        }));
-// TODO: make popup instantiated instead of created once + dispose on close
-        JFrame parentFrame = (JFrame) SwingUtilities.getWindowAncestor(this);
-        MultipleInputField fields = ComponentFactory.createMultipleInputsPanel(new String[] { "Name", "Age" });
+        top.add(ComponentFactory.createComboBox(deptService.getAllDepartments().toArray(new Department[0]),
+                newValue -> {
+                    table.model.loadEmployees(employeeService.filterByDepartment(newValue.getName()));
+                }));
 
-        Popup popUp = ComponentFactory.createPopup("Add new employee", parentFrame); // example // usage
-        popUp.addBodyComponent(fields);
+        JButton addBtn = ComponentFactory.createPrimaryButton("Add New Employee", AppIcon.ADD, IconColor.ACCENT);
+        addBtn.setHorizontalAlignment(SwingConstants.LEFT);
 
-        popUp.addBodyComponent(
-                ComponentFactory.createComboBoxPanelDesc("department", deptService.getAllDepartments().toArray(),
-                        newValue -> {
-                            // TODO ADD LOGIC
-                            System.err.println("HELLO");
-                            popUp.addBodyComponent(
-                                    ComponentFactory.createComboBoxPanelDesc("Type", employeeService.getEmployeeTypes(),
-                                            newValue2 -> {
-                                                // TODO ADD LOGIC
-                                            }));
-                            popUp.showPopup(parentFrame);
-                        }));
+        addBtn.addActionListener(e -> {
+            JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+            List<Department> depts = deptService.getAllDepartments();
+            EmployeeForm form = new EmployeeForm(List.of(new FullTimeForm(depts), new PartTimeForm(depts)));
+            Popup.showForm(parent, "Add new Employee", "Add Employee", form, emp -> {
+                employeeService.addEmployee(emp);
+                table.model.loadEmployees(employeeService.getAllEmployees());
+            });
+        });
 
-        JButton addDialogBtn = ComponentFactory.createPrimaryButton("Add Employee", AppIcon.ADD, IconColor.ACCENT);
-        popUp.addFooterComponent(addDialogBtn);
-        addDialogBtn.setHorizontalAlignment(SwingConstants.LEFT);
-        addDialogBtn.addActionListener(e -> employeeService.addEmployee(makeEmployee(fields)));
-        popUp.showPopup(parentFrame);
-
-        addBtn.addActionListener(e -> popUp.showPopup(parentFrame));
         add(addBtn, BorderLayout.SOUTH);
-
         add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);
     }
 
-    private Employee makeEmployee(MultipleInputField fields) {
-        System.out.println(fields.getValue("Name"));
-        Department cs = new Department("CS"); // TESTING // TODO: REMOVE LATER
-        return new FullTimeEmployee("Mohamed", cs, 18, "CEO", 1000.0, 500.0);// TESTING //TODO: REMOVE LATER
-    }
 }
