@@ -1,6 +1,7 @@
-package UI.Forms;
+package UI.Pages.Departments;
 
-import UI.ComponentFactory;
+import UI.Components.ComponentFactory;
+import UI.Components.FormBuilder;
 
 import javax.swing.*;
 

@@ -13,14 +13,18 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.border.EmptyBorder;
 
-import UI.UITheme.AppIcon;
-import UI.UITheme.IconColor;
+import UI.Components.AppButton;
+import UI.Components.ComponentFactory;
+import UI.Components.Divider;
+import UI.Theme.UITheme;
+import UI.Theme.AppIcon;
+import UI.Theme.IconColor;
 
 import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
 import java.util.function.Consumer;
 
-import UI.Forms.FormBuilder;
+import UI.Components.FormBuilder;
 
 public class Popup {
     private JDialog dialog;
@@ -47,8 +51,8 @@ public class Popup {
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         headerPanel.add(title);
 
-        JPanel separator = ComponentFactory.createHorizontalSeparator();
-        separator.setAlignmentX(Component.CENTER_ALIGNMENT);
+        Divider separator = Divider.horizontal();
+        separator.setAlignmentX(Component.LEFT_ALIGNMENT);
         headerPanel.add(separator);
 
         // remove later
@@ -108,20 +112,23 @@ public class Popup {
         Popup popup = new Popup(title, parent);
         popup.addBodyComponent(form.getPanel());
 
-        JButton cancelBtn = ComponentFactory.createSecondaryButton("Cancel", AppIcon.CANCEL, IconColor.LIGHT);
-        cancelBtn.addActionListener(e -> popup.close());
-
-        JButton submitBtn = ComponentFactory.createPrimaryButton(submitLabel, AppIcon.ADD, IconColor.DARK);
-        submitBtn.addActionListener(e -> {
-            try {
-                T result = form.build();
-                onSubmit.accept(result);
-                popup.close();
-            } catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(
-                        popup.dialog, ex.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
-            }
-        });
+        AppButton cancelBtn = AppButton.secondary("Cancel")
+                .icon(AppIcon.CANCEL, IconColor.LIGHT)
+                .alignLeft()
+                .onClick(popup::close);
+        AppButton submitBtn = AppButton.primary(submitLabel)
+                .icon(AppIcon.ADD, IconColor.DARK)
+                .alignLeft()
+                .onClick(() -> {
+                    try {
+                        T result = form.build();
+                        onSubmit.accept(result);
+                        popup.close();
+                    } catch (IllegalArgumentException ex) {
+                        JOptionPane.showMessageDialog(
+                                popup.dialog, ex.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                    }
+                });
 
         popup.addFooterComponent(cancelBtn);
         popup.addFooterComponent(submitBtn);

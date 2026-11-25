@@ -1,4 +1,4 @@
-package UI.Forms;
+package UI.Components;
 
 import javax.swing.JPanel;
 

@@ -1,14 +1,21 @@
-package UI.Departments;
+package UI.Pages.Departments;
 
 import Model.Department;
 import Service.DepartmentService;
 import Service.EmployeeService;
-import UI.ComponentFactory;
-import UI.Forms.DepartmentForm;
+import UI.Components.AppButton;
+import UI.Components.ComponentFactory;
+import UI.Components.Divider;
+import UI.Components.StatCard;
+import UI.Pages.Employees.EmployeeForm;
+import UI.Pages.Employees.FullTimeForm;
+import UI.Pages.Employees.PartTimeForm;
 import UI.Popup;
-import UI.UITheme;
-import UI.UITheme.AppIcon;
-import UI.UITheme.IconColor;
+import UI.Shell.AppContext;
+import UI.Shell.AppPage;
+import UI.Theme.UITheme;
+import UI.Theme.AppIcon;
+import UI.Theme.IconColor;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -17,16 +24,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class DepartmentsPage extends JPanel {
+public class DepartmentsPage extends AppPage {
     private final DepartmentService departmentService;
     private final EmployeeService employeeService;
 
     private final DepartmentsTable table;
-    private final JPanel totalDeptsCard;
-    private final JPanel totalEmpsCard;
+    private final StatCard totalDeptsCard;
+    private final StatCard totalEmpsCard;
     private String currentSearch = "";
 
-    public DepartmentsPage(Consumer<String> navigate) {
+    public DepartmentsPage(AppContext context) {
+        super(context);
         this.departmentService = new DepartmentService();
         this.employeeService = new EmployeeService();
 
@@ -43,7 +51,7 @@ public class DepartmentsPage extends JPanel {
         title.setForeground(UITheme.TEXT_LIGHT);
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JPanel separator = ComponentFactory.createHorizontalSeparator();
+        Divider separator = Divider.horizontal();
         separator.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JPanel statsRow = new JPanel(new GridLayout(1, 2, 10, 0));
@@ -51,8 +59,8 @@ public class DepartmentsPage extends JPanel {
         statsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
         statsRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
 
-        totalDeptsCard = ComponentFactory.createStatCard("Total Departments", "0", AppIcon.DEPARTMENT, IconColor.DARK);
-        totalEmpsCard  = ComponentFactory.createStatCard("Total Employees", "0", AppIcon.EMPLOYEE, IconColor.DARK);
+        totalDeptsCard = new StatCard("Total Departments", 0).icon(AppIcon.DEPARTMENT, IconColor.DARK);
+        totalEmpsCard  = new StatCard("Total Employees", 0).icon(AppIcon.EMPLOYEE, IconColor.DARK);
         statsRow.add(totalDeptsCard);
         statsRow.add(totalEmpsCard);
 
@@ -73,13 +81,18 @@ public class DepartmentsPage extends JPanel {
         JPanel buttonsRow = new JPanel(new GridLayout(1, 3, 12, 0));
         buttonsRow.setOpaque(false);
 
-        JButton addBtn    = ComponentFactory.createPrimaryButton("Add Department", AppIcon.ADD, IconColor.DARK);
-        JButton editBtn   = ComponentFactory.createSecondaryButton("Edit Selected", AppIcon.EDIT, IconColor.LIGHT);
-        JButton deleteBtn = ComponentFactory.createDangerButton("Delete Selected", AppIcon.CANCEL, IconColor.DANGER);
-
-        addBtn.addActionListener(e -> handleAdd());
-        editBtn.addActionListener(e -> handleEdit());
-        deleteBtn.addActionListener(e -> handleDelete());
+        AppButton addBtn = AppButton.primary("Add Department")
+                .icon(AppIcon.ADD, IconColor.DARK)
+                .alignLeft()
+                .onClick(this::handleAdd);
+        AppButton editBtn = AppButton.secondary("Edit Selected")
+                .icon(AppIcon.EDIT, IconColor.LIGHT)
+                .alignLeft()
+                .onClick(this::handleEdit);
+        AppButton deleteBtn = AppButton.danger("Delete Selected")
+                .icon(AppIcon.CANCEL, IconColor.DANGER)
+                .alignLeft()
+                .onClick(this::handleDelete);
 
         buttonsRow.add(addBtn);
         buttonsRow.add(editBtn);
@@ -91,7 +104,6 @@ public class DepartmentsPage extends JPanel {
 
         refreshTable();
     }
-
 
     private void handleAdd() {
         JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
@@ -157,7 +169,7 @@ public class DepartmentsPage extends JPanel {
         }
 
         table.model.loadDepartments(filtered, employeeService.getAllEmployees());
-        ComponentFactory.setStatCardValue(totalDeptsCard, allDepts.size());
-        ComponentFactory.setStatCardValue(totalEmpsCard, employeeService.getAllEmployees().size());
+        totalDeptsCard.setValue(allDepts.size());
+        totalEmpsCard.setValue(context.employees().getAllEmployees().size());
     }
 }

@@ -1,4 +1,4 @@
-import UI.MainFrame;
+import UI.Shell.MainFrame;
 
 import javax.swing.*;
 

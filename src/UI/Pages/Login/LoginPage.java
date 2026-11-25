@@ -1,10 +1,15 @@
-package UI.Login;
+package UI.Pages.Login;
 
-import UI.ComponentFactory;
-import UI.MainFrame;
-import UI.UITheme;
-import UI.UITheme.AppIcon;
-import UI.UITheme.IconColor;
+import UI.Components.AppButton;
+import UI.Components.ComponentFactory;
+import UI.Components.Divider;
+import UI.Shell.AppContext;
+import UI.Shell.AppPage;
+import UI.Shell.MainFrame;
+import UI.Shell.Route;
+import UI.Theme.UITheme;
+import UI.Theme.AppIcon;
+import UI.Theme.IconColor;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -16,7 +21,7 @@ import java.util.Arrays;
 import java.util.HexFormat;
 import java.util.function.Consumer;
 
-public class LoginPage extends JPanel {
+public class LoginPage extends AppPage {
     private static String adminHash = "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
 
     public static String hash(String input) {
@@ -29,7 +34,8 @@ public class LoginPage extends JPanel {
         }
     }
 
-    public LoginPage(Consumer<String> navigate) {
+    public LoginPage(AppContext context) {
+        super(context);
         this.setLayout(new GridBagLayout());
         this.setBackground(UITheme.BG_DARK);
 
@@ -43,7 +49,7 @@ public class LoginPage extends JPanel {
         titleLabel.setForeground(UITheme.TEXT_LIGHT);
         titleLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JPanel separator = ComponentFactory.createHorizontalSeparator();
+        Divider separator = Divider.horizontal();
         separator.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel userLabel = new JLabel("Username");
@@ -66,23 +72,27 @@ public class LoginPage extends JPanel {
         passwordField.setMaximumSize(new Dimension(Integer.MAX_VALUE, 36));
         passwordField.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JButton loginBtn = ComponentFactory.createPrimaryButton("Login", AppIcon.LOGIN, IconColor.DARK);
-        loginBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
-        loginBtn.addActionListener(e -> {
-            String user = usernameField.getText().trim();
-            char[] pass = passwordField.getPassword();
-            try {
-                if ("admin".equals(user) && hash(new String(pass)).equals(adminHash)) {
-                    passwordField.setText("");
-                    navigate.accept(MainFrame.HOME);
-                }
-            } finally {
-                Arrays.fill(pass, '\0');
-            }
-        });
+        AppButton loginBtn = AppButton.primary("Login")
+                .icon(AppIcon.LOGIN, IconColor.DARK)
+                .alignLeft()
+                .onClick(() -> {
+                    String user = usernameField.getText().trim();
+                    char[] pass = passwordField.getPassword();
+                    try {
+                        if ("admin".equals(user) && hash(new String(pass)).equals(adminHash)) {
+                            passwordField.setText("");
+                            context.navigate(Route.HOME);
+                        }
+                    } finally {
+                        Arrays.fill(pass, '\0');
+                    }
+                });
 
-        JButton exitBtn = ComponentFactory.createDangerButton("Exit", AppIcon.CANCEL, IconColor.DANGER);
-        exitBtn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        AppButton exitBtn = AppButton.danger("Exit")
+                .icon(AppIcon.CANCEL, IconColor.DANGER)
+                .alignLeft()
+                .onClick(()-> System.exit(0));
+
         exitBtn.addActionListener(e -> System.exit(0));
 
         card.add(titleLabel);

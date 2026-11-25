@@ -1,11 +1,9 @@
-package UI;
+package UI.Components;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.util.function.Consumer;
 
 public class InputField extends JTextField {

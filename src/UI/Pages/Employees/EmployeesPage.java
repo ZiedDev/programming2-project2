@@ -1,7 +1,11 @@
-package UI.Employees;
+package UI.Pages.Employees;
 
-import UI.MainFrame;
-import UI.UITheme.*;
+import UI.Components.AppButton;
+import UI.Shell.AppContext;
+import UI.Shell.AppPage;
+import UI.Shell.MainFrame;
+import UI.Theme.AppIcon;
+import UI.Theme.IconColor;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -10,18 +14,18 @@ import java.util.function.Consumer;
 
 import Model.Department;
 import Model.Employee;
-import Model.FullTimeEmployee;
 import Service.EmployeeService;
+
 import java.util.List;
-import UI.ComponentFactory;
+
+import UI.Components.ComponentFactory;
 import Service.DepartmentService;
 
 import UI.Popup;
 
-import UI.Forms.*;
-
-public class EmployeesPage extends JPanel {
-    public EmployeesPage(Consumer<String> navigate) {
+public class EmployeesPage extends AppPage {
+    public EmployeesPage(AppContext context) {
+        super(context);
         setLayout(new BorderLayout(10, 10));
         setBorder(new EmptyBorder(16, 16, 16, 16));
 
@@ -41,9 +45,6 @@ public class EmployeesPage extends JPanel {
         JLabel title = new JLabel("Page 1", SwingConstants.CENTER);
         title.setFont(new Font("SansSerif", Font.BOLD, 20));
 
-        JButton backBtn = new JButton("Back to Main");
-        backBtn.addActionListener(e -> navigate.accept(MainFrame.HOME));
-
         // JPanel bottom = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
 
         JPanel top = new JPanel(new GridLayout(1, 2, 10, 0));
@@ -56,22 +57,31 @@ public class EmployeesPage extends JPanel {
                     table.model.loadEmployees(employeeService.filterByDepartment(newValue.getName()));
                 }));
 
-        JButton addBtn = ComponentFactory.createPrimaryButton("Add New Employee", AppIcon.ADD, IconColor.ACCENT);
-        addBtn.setHorizontalAlignment(SwingConstants.LEFT);
-
-        addBtn.addActionListener(e -> {
-            JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-            List<Department> depts = deptService.getAllDepartments();
-            EmployeeForm form = new EmployeeForm(List.of(new FullTimeForm(depts), new PartTimeForm(depts)));
-            Popup.showForm(parent, "Add new Employee", "Add Employee", form, emp -> {
-                employeeService.addEmployee(emp);
-                table.model.loadEmployees(employeeService.getAllEmployees());
-            });
-        });
+        AppButton addBtn = AppButton.primary("Add New Employee")
+                .icon(AppIcon.ADD)
+                .alignLeft()
+                .onClick(() -> {
+                    JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+                    List<Department> depts = deptService.getAllDepartments();
+                    EmployeeForm form = new EmployeeForm(List.of(new FullTimeForm(depts), new PartTimeForm(depts)));
+                    Popup.showForm(parent, "Add new Employee", "Add Employee", form, emp -> {
+                        employeeService.addEmployee(emp);
+                        table.model.loadEmployees(employeeService.getAllEmployees());
+                    });
+                });
 
         add(addBtn, BorderLayout.SOUTH);
         add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);
+
+        refresh();
     }
 
+    public void onShow() {
+        refresh();
+    }
+
+    // what to update when the page is refreshed
+    private void refresh() {
+    }
 }

@@ -1,4 +1,4 @@
-package UI.Employees;
+package UI.Pages.Employees;
 
 import java.util.List;
 

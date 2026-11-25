@@ -1,7 +1,8 @@
-package UI.Forms;
+package UI.Pages.Employees;
 
 import Model.Employee;
-import UI.ComponentFactory;
+import UI.Components.ComponentFactory;
+import UI.Components.FormBuilder;
 
 import javax.swing.*;
 import java.awt.*;

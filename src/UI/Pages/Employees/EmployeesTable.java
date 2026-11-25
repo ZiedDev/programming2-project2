@@ -1,4 +1,4 @@
-package UI.Employees;
+package UI.Pages.Employees;
 import javax.swing.JTable;
 import javax.swing.JScrollPane;
 public class EmployeesTable {

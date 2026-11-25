@@ -1,4 +1,4 @@
-package UI.Departments;
+package UI.Pages.Departments;
 
 import Model.Department;
 import Model.Employee;
