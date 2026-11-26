@@ -4,11 +4,14 @@ import UI.Components.*;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
 import UI.Theme.AppIcon;
+import UI.Theme.IconColor;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import Model.Department;
 import Model.Employee;
+import Model.FullTimeEmployee;
+import Model.PartTimeEmployee;
 import Service.EmployeeService;
 import Service.DepartmentService;
 import java.util.List;
@@ -48,10 +51,25 @@ public class EmployeesPage extends AppPage {
         deptsBox = new SelectField<>(options).onChange(
                 newValue -> table.model.loadEmployees(employeeService.filterByDepartment(newValue)));
 
+        JPanel buttonsRow = new JPanel(new GridLayout(1, 3, 12, 0));
+        buttonsRow.setOpaque(false);
+
         AppButton addBtn = AppButton.primary("Add New Employee")
-                .icon(AppIcon.ADD)
+                .icon(AppIcon.ADD, IconColor.DARK)
                 .alignLeft()
                 .onClick(this::handleAdd);
+        AppButton editBtn = AppButton.secondaryAlt("Edit Selected")
+                .icon(AppIcon.EDIT, IconColor.LIGHT)
+                .alignLeft()
+                .onClick(this::handleEdit);
+        AppButton deleteBtn = AppButton.danger("Delete Selected")
+                .icon(AppIcon.CANCEL, IconColor.DANGER)
+                .alignLeft()
+                .onClick(this::handleDelete);
+
+        buttonsRow.add(addBtn);
+        buttonsRow.add(editBtn);
+        buttonsRow.add(deleteBtn);
 
         searchParams.add(employeeSearchRow);
         searchParams.add(LabeledField.vertical("Department", deptsBox));
@@ -59,7 +77,7 @@ public class EmployeesPage extends AppPage {
         top.add(createHeader("Employees"));
         top.add(searchParams);
 
-        add(addBtn, BorderLayout.SOUTH);
+        add(buttonsRow, BorderLayout.SOUTH);
         add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);
 
@@ -87,5 +105,69 @@ public class EmployeesPage extends AppPage {
             employeeService.addEmployee(emp);
             table.model.loadEmployees(employeeService.getAllEmployees());
         });
+    }
+
+    private void handleEdit() {
+        Employee selected = table.getSelectedEmployee();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(this, "Please select an employee to edit.", "No Selection",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+        List<Department> depts = deptService.getAllDepartments();
+        EmployeeForm form = new EmployeeForm(
+                List.of(new FullTimeForm(depts, selected), new PartTimeForm(depts, selected)),
+                selected);
+
+        Popup.showForm(parent, "Edit Employee", "Save Changes", form, updated -> {
+            if (updated instanceof FullTimeEmployee ft) {
+                employeeService.updateEmployee(
+                        selected.getID(),
+                        ft.getFullName(),
+                        ft.getDepartment(),
+                        ft.getAge(),
+                        ft.getPosition(),
+                        ft.getBasicSalary(),
+                        ft.getBonus());
+            } else if (updated instanceof PartTimeEmployee pt) {
+                employeeService.updateEmployee(
+                        selected.getID(),
+                        pt.getFullName(),
+                        pt.getDepartment(),
+                        pt.getAge(),
+                        pt.getPosition(),
+                        pt.getHourlyRate(),
+                        pt.getHoursPerMonth());
+            }
+            table.model.loadEmployees(employeeService.getAllEmployees());
+            JOptionPane.showMessageDialog(this, "Employee updated successfully!");
+        });
+    }
+
+    private void handleDelete() {
+        Employee selected = table.getSelectedEmployee();
+        if (selected == null) {
+            JOptionPane.showMessageDialog(this, "Please select an employee to delete.", "No Selection",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        int confirm = JOptionPane.showConfirmDialog(
+                this,
+                "Are you sure you want to delete '" + selected.getFullName() + "'?",
+                "Confirm Delete",
+                JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
+            try {
+                employeeService.deleteEmployee(selected.getID());
+                table.model.loadEmployees(employeeService.getAllEmployees());
+                JOptionPane.showMessageDialog(this, "Employee deleted successfully!");
+            } catch (IllegalArgumentException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage(), "Cannot Delete", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 }

@@ -22,7 +22,7 @@ public class EmployeeService {
 
     public Employee searchById(String id) {
         for (Employee emp : this.employees) {
-            if (emp.getID() == id) {
+            if (emp.getID() != null && emp.getID().equals(id)) {
                 return emp;
             }
         }
@@ -196,7 +196,7 @@ public class EmployeeService {
             throw new RuntimeException("Failed to save employees to file: " + e.getMessage(), e);
         }
     }
-    public String[] getEmployeeTypes(){ // TODO : make this less hard coded
+    public String[] getEmployeeTypes(){
         return new String[]{"Full-Time","Part-Time"};
     }
 }

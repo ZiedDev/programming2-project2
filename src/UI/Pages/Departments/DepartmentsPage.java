@@ -78,7 +78,7 @@ public class DepartmentsPage extends AppPage {
                 .icon(AppIcon.ADD, IconColor.DARK)
                 .alignLeft()
                 .onClick(this::handleAdd);
-        AppButton editBtn = AppButton.secondary("Edit Selected")
+        AppButton editBtn = AppButton.secondaryAlt("Edit Selected")
                 .icon(AppIcon.EDIT, IconColor.LIGHT)
                 .alignLeft()
                 .onClick(this::handleEdit);
