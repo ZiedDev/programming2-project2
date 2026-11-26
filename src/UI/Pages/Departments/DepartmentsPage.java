@@ -3,18 +3,13 @@ package UI.Pages.Departments;
 import Model.Department;
 import Service.DepartmentService;
 import Service.EmployeeService;
-import UI.Components.AppButton;
-import UI.Components.ComponentFactory;
-import UI.Components.Divider;
-import UI.Components.StatCard;
-
+import UI.Components.*;
 import UI.Popup;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
 import UI.Theme.UITheme;
 import UI.Theme.AppIcon;
 import UI.Theme.IconColor;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
@@ -61,11 +56,12 @@ public class DepartmentsPage extends AppPage {
         statsRow.add(totalDeptsCard);
         statsRow.add(totalEmpsCard);
 
-        JPanel searchRow = ComponentFactory.createInputField("Search by Name:", "", 20, query -> {
-            this.currentSearch = query;
-            refreshTable();
-        });
-        searchRow.setAlignmentX(Component.LEFT_ALIGNMENT);
+        InputFieldNew searchField = new InputFieldNew("", 20)
+                .onChange(query -> {
+                    this.currentSearch = query;
+                    refreshTable();
+                });
+        LabeledField<InputFieldNew> searchRow = LabeledField.horizontal("Search by Name:", searchField);
 
         topPanel.add(title);
         topPanel.add(separator);

@@ -1,31 +1,22 @@
 package UI.Pages.Employees;
 
-import UI.Components.AppButton;
+import UI.Components.*;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
-import UI.Shell.MainFrame;
 import UI.Theme.AppIcon;
-import UI.Theme.IconColor;
-
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.function.Consumer;
-
 import Model.Department;
 import Model.Employee;
 import Service.EmployeeService;
-
+import Service.DepartmentService;
 import java.util.List;
 import java.util.ArrayList;
-
-import UI.Components.ComponentFactory;
-import Service.DepartmentService;
-
 import UI.Popup;
 
 public class EmployeesPage extends AppPage {
-    JComboBox deptsBox;
+    SelectField<String> deptsBox;
     EmployeeService employeeService = context.employees();
     DepartmentService deptService = context.departments();
 
@@ -40,46 +31,49 @@ public class EmployeesPage extends AppPage {
 
         JPanel top = new JPanel();
         top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
+        top.setOpaque(false);
 
         JPanel searchParams = new JPanel(new GridLayout(1, 2, 10, 0));
         searchParams.setOpaque(false);
         searchParams.setAlignmentX(LEFT_ALIGNMENT);
-        top.add(createHeader("Employees"));
-        top.setOpaque(false);
 
-        searchParams.add(ComponentFactory.createInputField("", 10, newValue -> {
-            table.model.loadEmployees(employeeService.searchByName(newValue));
-        }));
-
+        
+        InputFieldNew searchField = new InputFieldNew("", 10)
+        .onChange(newValue -> table.model.loadEmployees(employeeService.searchByName(newValue)));
+        LabeledField<InputFieldNew> employeeSearchRow = LabeledField.vertical("Search by name", searchField);
+        
         List<String> options = new ArrayList<>(List.of(""));
         for (Department x : deptService.getAllDepartments()) {
             options.add(x.getName());
         }
-        deptsBox = ComponentFactory.createComboBox(options.toArray(new String[0]),
-                newValue -> {
-                    table.model.loadEmployees(employeeService.filterByDepartment(newValue));
+        deptsBox = new SelectField<>(options).onChange(
+            newValue -> table.model.loadEmployees(employeeService.filterByDepartment(newValue)));
+            
+            
+            AppButton addBtn = AppButton.primary("Add New Employee")
+            .icon(AppIcon.ADD)
+            .alignLeft()
+            .onClick(() -> {
+                JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
+                List<Department> depts = deptService.getAllDepartments();
+                EmployeeForm form = new EmployeeForm(List.of(new FullTimeForm(depts), new PartTimeForm(depts)));
+                Popup.showForm(parent, "Add new Employee", "Add Employee", form, emp -> {
+                    employeeService.addEmployee(emp);
+                    table.model.loadEmployees(employeeService.getAllEmployees());
                 });
+            });
+            
+            
+        searchParams.add(employeeSearchRow);
+        searchParams.add(LabeledField.vertical("Department", deptsBox));
 
-        searchParams.add(deptsBox);
-        // top.add(createHeader("Employees"));
+        top.add(createHeader("Employees"));
         top.add(searchParams);
-
-        AppButton addBtn = AppButton.primary("Add New Employee")
-                .icon(AppIcon.ADD)
-                .alignLeft()
-                .onClick(() -> {
-                    JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-                    List<Department> depts = deptService.getAllDepartments();
-                    EmployeeForm form = new EmployeeForm(List.of(new FullTimeForm(depts), new PartTimeForm(depts)));
-                    Popup.showForm(parent, "Add new Employee", "Add Employee", form, emp -> {
-                        employeeService.addEmployee(emp);
-                        table.model.loadEmployees(employeeService.getAllEmployees());
-                    });
-                });
 
         add(addBtn, BorderLayout.SOUTH);
         add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);
+        
         refresh();
     }
 
@@ -93,6 +87,6 @@ public class EmployeesPage extends AppPage {
         for (Department x : deptService.getAllDepartments()) {
             options.add(x.getName());
         }
-        deptsBox.setModel(new DefaultComboBoxModel<>(options.toArray()));
+        deptsBox.options(options);
     }
 }
