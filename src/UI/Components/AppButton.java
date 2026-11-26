@@ -38,6 +38,10 @@ public class AppButton extends JButton {
         return new AppButton(text, UITheme.DANGER, UITheme.TEXT_DARK, IconColor.DARK);
     }
 
+    public static AppButton secondaryAlt(String text) {
+        return new AppButton(text, UITheme.BG_BASE, UITheme.TEXT_LIGHT, IconColor.LIGHT);
+    }
+
     public AppButton icon(AppIcon icon) {
         return icon(icon, this.defaultIconColor);
     }
@@ -71,4 +75,3 @@ public class AppButton extends JButton {
         return this;
     }
 }
-

@@ -9,12 +9,10 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 
 import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.border.EmptyBorder;
 
 import UI.Components.AppButton;
-import UI.Components.ComponentFactory;
 import UI.Components.Divider;
 import UI.Theme.UITheme;
 import UI.Theme.AppIcon;
@@ -53,13 +51,6 @@ public class Popup {
 
         Divider separator = Divider.horizontal();
         headerPanel.add(separator);
-
-        // remove later
-
-        // panel.add(new JLabel("POPUP"));
-        // JButton close = new JButton("close");
-        // close.addActionListener(e -> dialog.dispose());
-        // panel.add(close);
 
         panel.add(headerPanel, BorderLayout.NORTH);
         bodyPanel = new JPanel();
@@ -111,7 +102,7 @@ public class Popup {
         Popup popup = new Popup(title, parent);
         popup.addBodyComponent(form.getPanel());
 
-        AppButton cancelBtn = AppButton.secondary("Cancel")
+        AppButton cancelBtn = AppButton.secondaryAlt("Cancel")
                 .icon(AppIcon.CANCEL, IconColor.LIGHT)
                 .alignLeft()
                 .onClick(popup::close);

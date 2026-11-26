@@ -7,9 +7,7 @@ import UI.Components.AppButton;
 import UI.Components.ComponentFactory;
 import UI.Components.Divider;
 import UI.Components.StatCard;
-import UI.Pages.Employees.EmployeeForm;
-import UI.Pages.Employees.FullTimeForm;
-import UI.Pages.Employees.PartTimeForm;
+
 import UI.Popup;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
@@ -22,7 +20,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class DepartmentsPage extends AppPage {
     private final DepartmentService departmentService;
@@ -35,8 +32,8 @@ public class DepartmentsPage extends AppPage {
 
     public DepartmentsPage(AppContext context) {
         super(context);
-        this.departmentService = new DepartmentService();
-        this.employeeService = new EmployeeService();
+        this.departmentService = context.departments();
+        this.employeeService = context.employees();
 
         this.setLayout(new BorderLayout(0, 16));
         this.setBackground(UITheme.BG_DARK);
@@ -60,7 +57,7 @@ public class DepartmentsPage extends AppPage {
         statsRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
 
         totalDeptsCard = new StatCard("Total Departments", 0).icon(AppIcon.DEPARTMENT, IconColor.DARK);
-        totalEmpsCard  = new StatCard("Total Employees", 0).icon(AppIcon.EMPLOYEE, IconColor.DARK);
+        totalEmpsCard = new StatCard("Total Employees", 0).icon(AppIcon.EMPLOYEE, IconColor.DARK);
         statsRow.add(totalDeptsCard);
         statsRow.add(totalEmpsCard);
 
@@ -119,7 +116,8 @@ public class DepartmentsPage extends AppPage {
     private void handleEdit() {
         Department selected = table.getSelectedDepartment();
         if (selected == null) {
-            JOptionPane.showMessageDialog(this, "Please select a department to edit.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a department to edit.", "No Selection",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -136,7 +134,8 @@ public class DepartmentsPage extends AppPage {
     private void handleDelete() {
         Department selected = table.getSelectedDepartment();
         if (selected == null) {
-            JOptionPane.showMessageDialog(this, "Please select a department to delete.", "No Selection", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Please select a department to delete.", "No Selection",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
