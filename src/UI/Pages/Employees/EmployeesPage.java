@@ -38,13 +38,16 @@ public class EmployeesPage extends AppPage {
         EmployeesTable table = new EmployeesTable();
         table.model.loadEmployees(employees);
 
-        JLabel title = new JLabel("Page 1", SwingConstants.CENTER);
-        title.setFont(new Font("SansSerif", Font.BOLD, 20));
+        JPanel top = new JPanel();
+        top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
 
-        JPanel top = new JPanel(new GridLayout(1, 2, 10, 0));
+        JPanel searchParams = new JPanel(new GridLayout(1, 2, 10, 0));
+        searchParams.setOpaque(false);
+        searchParams.setAlignmentX(LEFT_ALIGNMENT);
+        top.add(createHeader("Employees"));
         top.setOpaque(false);
 
-        top.add(ComponentFactory.createInputField("", 10, newValue -> {
+        searchParams.add(ComponentFactory.createInputField("", 10, newValue -> {
             table.model.loadEmployees(employeeService.searchByName(newValue));
         }));
 
@@ -57,7 +60,9 @@ public class EmployeesPage extends AppPage {
                     table.model.loadEmployees(employeeService.filterByDepartment(newValue));
                 });
 
-        top.add(deptsBox);
+        searchParams.add(deptsBox);
+        // top.add(createHeader("Employees"));
+        top.add(searchParams);
 
         AppButton addBtn = AppButton.primary("Add New Employee")
                 .icon(AppIcon.ADD)
@@ -75,7 +80,6 @@ public class EmployeesPage extends AppPage {
         add(addBtn, BorderLayout.SOUTH);
         add(top, BorderLayout.NORTH);
         add(table.scrollPane, BorderLayout.CENTER);
-
         refresh();
     }
 
