@@ -1,6 +1,7 @@
 package Model;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Department implements Serializable {
@@ -24,6 +25,18 @@ public class Department implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Department other)) return false;
+        return Objects.equals(this.ID, other.ID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.ID);
     }
 
     @Override

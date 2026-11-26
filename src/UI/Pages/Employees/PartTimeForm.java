@@ -18,10 +18,25 @@ public class PartTimeForm implements FormBuilder<Employee> {
     private final InputFieldNew hoursField = new InputFieldNew("");
 
     public PartTimeForm(List<Department> departments) {
+        this(departments, null);
+    }
+
+    public PartTimeForm(List<Department> departments, Employee initialEmployee) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
 
         deptBox = new SelectField<>(departments);
+
+        if (initialEmployee != null) {
+            nameField.value(initialEmployee.getFullName());
+            deptBox.selected(initialEmployee.getDepartment());
+            ageField.value(String.valueOf(initialEmployee.getAge()));
+            positionField.value(initialEmployee.getPosition());
+            if (initialEmployee instanceof PartTimeEmployee pt) {
+                rateField.value(String.valueOf(pt.getHourlyRate()));
+                hoursField.value(String.valueOf(pt.getHoursPerMonth()));
+            }
+        }
 
         panel.add(LabeledField.horizontal("Full Name", nameField));
         panel.add(LabeledField.horizontal("Department", deptBox));

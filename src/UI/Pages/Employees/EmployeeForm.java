@@ -12,6 +12,10 @@ public class EmployeeForm implements FormBuilder<Employee> {
     private final SelectField<FormBuilder<Employee>> typeBox;
 
     public EmployeeForm(List<FormBuilder<Employee>> typeForms) {
+        this(typeForms, null);
+    }
+
+    public EmployeeForm(List<FormBuilder<Employee>> typeForms, Employee initialEmployee) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
 
@@ -32,6 +36,17 @@ public class EmployeeForm implements FormBuilder<Employee> {
             if (w != null)
                 w.pack();
         });
+
+        if (initialEmployee != null) {
+            for (FormBuilder<Employee> form : typeForms) {
+                if (form.toString().equals(initialEmployee.getEmployeeType())) {
+                    typeBox.selected(form);
+                    cardLayout.show(cards, form.toString());
+                    break;
+                }
+            }
+            typeBox.setEnabled(false);
+        }
 
         panel.add(LabeledField.horizontal("Type", typeBox));
         panel.add(cards);

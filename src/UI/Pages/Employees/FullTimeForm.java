@@ -18,10 +18,25 @@ public class FullTimeForm implements FormBuilder<Employee> {
     private final InputFieldNew bonusField = new InputFieldNew("");
 
     public FullTimeForm(List<Department> departments) {
+        this(departments, null);
+    }
+
+    public FullTimeForm(List<Department> departments, Employee initialEmployee) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
 
         deptBox = new SelectField<Department>(departments);
+
+        if (initialEmployee != null) {
+            nameField.value(initialEmployee.getFullName());
+            deptBox.selected(initialEmployee.getDepartment());
+            ageField.value(String.valueOf(initialEmployee.getAge()));
+            positionField.value(initialEmployee.getPosition());
+            if (initialEmployee instanceof FullTimeEmployee ft) {
+                salaryField.value(String.valueOf(ft.getBasicSalary()));
+                bonusField.value(String.valueOf(ft.getBonus()));
+            }
+        }
 
         panel.add(LabeledField.horizontal("Full name", nameField));
         panel.add(LabeledField.horizontal("Department", deptBox));
