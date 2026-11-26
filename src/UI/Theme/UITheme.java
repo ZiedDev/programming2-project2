@@ -13,7 +13,7 @@ public final class UITheme {
 
     public static final Font FONT_TITLE    = new Font(FONT_FAMILY, Font.BOLD, 22);
     public static final Font FONT_DISPLAY  = new Font(FONT_FAMILY, Font.BOLD, 32);
-    public static final Font FONT_BODY     = new Font(FONT_FAMILY, Font.PLAIN, 15);
+    public static final Font FONT_BODY     = new Font(FONT_FAMILY, Font.PLAIN, 16);
     public static final Font FONT_SUBTITLE = new Font(FONT_FAMILY, Font.BOLD, 20);
 
     // Colors
@@ -34,5 +34,6 @@ public final class UITheme {
     public static final int ICON_SIZE            = 24;
     public static final int BUTTON_HEIGHT        = 64;
     public static final int FORM_CONTROL_COLUMNS = 20;
+    public static final int FORM_CONTROL_WIDTH   = 220;
     public static final int TABLE_ROW_HEIGHT     = 28;
 }
