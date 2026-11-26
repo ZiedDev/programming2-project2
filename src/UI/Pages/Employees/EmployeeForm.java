@@ -1,8 +1,7 @@
 package UI.Pages.Employees;
 
 import Model.Employee;
-import UI.Components.ComponentFactory;
-import UI.Components.FormBuilder;
+import UI.Components.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +9,7 @@ import java.util.List;
 
 public class EmployeeForm implements FormBuilder<Employee> {
     private final JPanel panel = new JPanel();
-    private final JComboBox<FormBuilder<Employee>> typeBox;
+    private final SelectField<FormBuilder<Employee>> typeBox;
 
     public EmployeeForm(List<FormBuilder<Employee>> typeForms) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -25,20 +24,16 @@ public class EmployeeForm implements FormBuilder<Employee> {
             cards.add(form.getPanel(), form.toString());
         }
 
-        @SuppressWarnings("unchecked")
-        FormBuilder<Employee>[] options = typeForms.toArray(new FormBuilder[0]);
-        typeBox = ComponentFactory.createComboBox(options, selected -> {
-            if (selected != null) {
-                cardLayout.show(cards, selected.toString());
-                cards.revalidate();
-                cards.repaint();
-                Window w = SwingUtilities.getWindowAncestor(panel);
-                if (w != null)
-                    w.pack();
-            }
+        typeBox = new SelectField<>(typeForms).onChange(selected -> {
+            cardLayout.show(cards, selected.toString());
+            cards.revalidate();
+            cards.repaint();
+            Window w = SwingUtilities.getWindowAncestor(panel);
+            if (w != null)
+                w.pack();
         });
 
-        panel.add(ComponentFactory.createFormRow("Type", typeBox));
+        panel.add(LabeledField.horizontal("Type", typeBox));
         panel.add(cards);
     }
 
@@ -49,7 +44,7 @@ public class EmployeeForm implements FormBuilder<Employee> {
 
     @Override
     public Employee build() {
-        FormBuilder<Employee> selected = (FormBuilder<Employee>) typeBox.getSelectedItem();
+        FormBuilder<Employee> selected = typeBox.getSelected();
         if (selected == null) {
             throw new IllegalArgumentException("Please select an employee type.");
         }

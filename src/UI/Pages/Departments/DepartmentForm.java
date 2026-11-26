@@ -1,23 +1,20 @@
 package UI.Pages.Departments;
 
-import UI.Components.ComponentFactory;
-import UI.Components.FormBuilder;
+import UI.Components.*;
 
 import javax.swing.*;
 
 public class DepartmentForm implements FormBuilder<String> {
     private final JPanel panel = new JPanel();
-    private final JTextField nameField = new JTextField(20);
+    private final InputFieldNew nameField;
 
     public DepartmentForm(String initialName) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
 
-        if (initialName != null) {
-            nameField.setText(initialName);
-        }
+        nameField = new InputFieldNew(initialName);
 
-        panel.add(ComponentFactory.createFormRow("Department Name", nameField));
+        panel.add(LabeledField.horizontal("Department Name", nameField));
     }
 
     @Override
@@ -27,7 +24,7 @@ public class DepartmentForm implements FormBuilder<String> {
 
     @Override
     public String build() {
-        String name = nameField.getText().trim();
+        String name = nameField.getValue();
         if (name.isEmpty()) {
             throw new IllegalArgumentException("Department name cannot be empty.");
         }
