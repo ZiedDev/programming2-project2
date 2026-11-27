@@ -8,6 +8,10 @@ This file separates the Employee Management System (EMS) into two layers:
 ## 1. Backend Class Diagram
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     direction TB
 
@@ -163,6 +167,10 @@ classDiagram
 ## 2. Frontend vs Backend Split (Preliminary Placeholder)
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     direction LR
 

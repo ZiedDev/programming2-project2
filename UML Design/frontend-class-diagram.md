@@ -19,6 +19,10 @@ To keep every diagram readable with zero overlapping boxes, zero hidden elements
 > High-level package & class overview. Detailed fields, methods, `UITheme` references, and widget-level edges are shown in Sections 2–5 so this overview remains compact and readable.
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     direction TB
 
@@ -92,7 +96,7 @@ classDiagram
 
     %% Entry & Shell
     Main ..> MainFrame : launches
-    MainFrame *-- Sidebar : hosts
+    MainFrame *-- Sidebar
     MainFrame *-- AppContext : creates
     MainFrame *-- AppPage : registers
     MainFrame ..> Route : switches
@@ -108,7 +112,7 @@ classDiagram
     AppPage <|-- EmployeesPage
 
     %% Key Page Collaborators
-    HomePage *-- StatCard : KPIs
+    HomePage *-- StatCard
     DepartmentsPage *-- DataTable~T~ : lists
     EmployeesPage *-- DataTable~T~ : lists
     DepartmentsPage ..> Modal : dialogs
@@ -135,6 +139,10 @@ classDiagram
 ## 2. Shell & Pages — Detailed Class Diagram (`Main`, `UI.Shell`, `UI.Pages`)
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     direction TB
 
@@ -246,9 +254,9 @@ classDiagram
 
     %% Entry & Shell Wiring
     Main ..> MainFrame : launches
-    MainFrame "1" *-- "1" Sidebar : hosts
+    MainFrame "1" *-- "1" Sidebar : contains
     MainFrame "1" *-- "1" AppContext : creates
-    MainFrame "1" *-- "4" AppPage : hosts in CardLayout
+    MainFrame "1" *-- "*" AppPage : hosts in CardLayout
     MainFrame ..> Route : switches route
     Sidebar ..> Route : nav buttons
     AppContext ..> Route : navigates
@@ -264,7 +272,7 @@ classDiagram
 
     %% Page Service Dependencies
     HomePage ..> DepartmentService : dept count
-    HomePage ..> EmployeeService : KPI totals
+    HomePage ..> EmployeeService
     EmployeesPage ..> DepartmentService : filter options
     EmployeesPage ..> EmployeeService : CRUD & search
     DepartmentsPage ..> DepartmentService : CRUD & search
@@ -276,6 +284,10 @@ classDiagram
 ## 3. Forms & Modals — Detailed Class Diagram (`UI.Forms`, `FormBuilder`, `Modal`)
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     direction TB
 
@@ -348,7 +360,7 @@ classDiagram
         }
     }
 
-    namespace Domain_Models {
+    namespace Backend_Models {
         class Employee {
             <<abstract>>
         }
@@ -357,7 +369,7 @@ classDiagram
         class PartTimeEmployee
     }
 
-    namespace Form_Controls {
+    namespace Components {
         class SelectField~T~
         class InputField
         class LabeledField~C~
@@ -366,7 +378,7 @@ classDiagram
     }
 
     %% Modal & FormBase
-    Modal ..> FormBuilder~T~ : embeds & submits
+    Modal ..> FormBuilder~T~ : displays & submits
     Modal ..> Divider : dividers
     Modal ..> AppButton : footer buttons
 
@@ -406,6 +418,10 @@ classDiagram
 ### 4A. Interactive Controls & Theme
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     direction TB
 
@@ -550,6 +566,10 @@ classDiagram
 ### 4B. Layout, Table & Display Components
 
 ```mermaid
+---
+config:
+  layout: elk
+---
 classDiagram
     direction TB
 
@@ -646,32 +666,3 @@ classDiagram
     LabeledField~C~ ..> UITheme : font & width
     DataTable~T~ ..> UITheme : table theme
 ```
-
----
-
-## 5. Swing Superclass Mapping & Frontend Design Notes
-
-### Java Swing Superclass Summary
-
-| Package | Class | Superclass / Kind |
-| :--- | :--- | :--- |
-| `(default)` | `Main` | Standalone entry point |
-| `UI.Shell` | `MainFrame` | `extends JFrame` |
-| `UI.Shell` | `Sidebar` | `extends JPanel` |
-| `UI.Shell` | `AppPage` | `abstract class extends JPanel` |
-| `UI.Shell` | `AppContext` | Standalone context holder |
-| `UI.Shell` | `Route` | `enum` |
-| `UI.Pages` | `LoginPage`, `HomePage`, `EmployeesPage`, `DepartmentsPage` | `extends AppPage` (`JPanel`) |
-| `UI.Forms` | `DepartmentForm`, `EmployeeForm`, `FullTimeForm`, `PartTimeForm` | `extends FormBuilder<T>` (`JPanel`) |
-| `UI.Components` | `FormBuilder<T>`, `LabeledField<C extends JComponent>`, `Divider`, `StatCard` | `extends JPanel` |
-| `UI.Components` | `AppButton` | `extends JButton` |
-| `UI.Components` | `SidebarButton` | `extends AppButton` (`JButton`) |
-| `UI.Components` | `InputField` | `extends JTextField` |
-| `UI.Components` | `PasswordField` | `extends JPasswordField` |
-| `UI.Components` | `SelectField<T>` | `extends JComboBox<T>` |
-| `UI.Components` | `DataTable<T>` | `extends JScrollPane` |
-| `UI.Components` | `DataTable.Model<T>` | `private static class extends AbstractTableModel` |
-| `UI.Components` | `Modal` | `final` utility class (creates `JDialog`) |
-| `UI.Theme` | `UITheme` | `final` constants class |
-| `UI.Theme` | `AppIcon`, `IconColor` | `enum` |
-
