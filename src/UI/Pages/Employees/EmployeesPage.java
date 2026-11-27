@@ -178,7 +178,6 @@ public class EmployeesPage extends AppPage {
         String nameQuery = currentSearch.trim().toLowerCase();
         String deptQuery = currDepartmentName.trim().toLowerCase();
         for (Employee emp : allEmployees) {
-            System.out.println(emp.getFullName() + nameQuery);
             if ((nameQuery.isEmpty() || emp.getFullName().toLowerCase().contains(nameQuery))
                     && (deptQuery.isEmpty() || emp.getDepartment().getName().toLowerCase().contains(deptQuery))) {
                 filtered.add(emp);
