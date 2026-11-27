@@ -63,7 +63,7 @@ public class LoginPage extends AppPage {
         separator2.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         AppButton loginBtn = AppButton.primary("Login")
-                .icon(AppIcon.LOGIN, IconColor.DARK)
+                .icon(AppIcon.LOGIN)
                 .alignLeft()
                 .alignX(Component.LEFT_ALIGNMENT)
                 .onClick(() -> {
@@ -80,7 +80,7 @@ public class LoginPage extends AppPage {
                 });
 
         AppButton exitBtn = AppButton.danger("Exit")
-                .icon(AppIcon.CANCEL, IconColor.DANGER)
+                .icon(AppIcon.CANCEL)
                 .alignLeft()
                 .alignX(Component.LEFT_ALIGNMENT)
                 .onClick(() -> System.exit(0));

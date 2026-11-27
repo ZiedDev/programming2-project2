@@ -34,8 +34,8 @@ public class PartTimeForm extends FormBuilder<Employee> {
         }
 
         add(LabeledField.horizontal("Full Name", nameField));
-        add(LabeledField.horizontal("Age", ageField));
         add(LabeledField.horizontal("Department", deptBox));
+        add(LabeledField.horizontal("Age", ageField));
         add(LabeledField.horizontal("Position", positionField));
         add(LabeledField.horizontal("Hourly Rate", rateField));
         add(LabeledField.horizontal("Hours / Month", hoursField));
