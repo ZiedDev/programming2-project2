@@ -20,8 +20,8 @@ import java.awt.Window;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
-public final class FormDialog {
-    private FormDialog() {}
+public final class Modal {
+    private Modal() {}
 
     // Form modals
     public static <T> void show(

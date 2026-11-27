@@ -4,19 +4,16 @@ import Model.Department;
 import Model.Employee;
 import UI.Components.AppButton;
 import UI.Components.DataTable;
-import UI.Components.FormDialog;
+import UI.Components.Modal;
 import UI.Components.InputField;
 import UI.Components.LabeledField;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
 import UI.Theme.AppIcon;
-import UI.Theme.IconColor;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
@@ -80,36 +77,36 @@ public class DepartmentsPage extends AppPage {
     }
 
     private void handleAdd() {
-        FormDialog.show(this, "Add Department", "Add Department", new DepartmentForm(""), deptName -> {
+        Modal.show(this, "Add Department", "Add Department", new DepartmentForm(""), deptName -> {
             context.departments().addDepartment(deptName);
             refreshTable();
-            FormDialog.showInfo(this, "Department added successfully!");
+            Modal.showInfo(this, "Department added successfully!");
         });
     }
 
     private void handleEdit() {
         Department selected = table.getSelectedItem();
         if (selected == null) {
-            FormDialog.showWarning(this, "No Selection", "Please select a department to edit.");
+            Modal.showWarning(this, "No Selection", "Please select a department to edit.");
             return;
         }
 
-        FormDialog.show(this, "Edit Department", "Save Changes", AppIcon.EDIT,
+        Modal.show(this, "Edit Department", "Save Changes", AppIcon.EDIT,
                 new DepartmentForm(selected.getName()), newName -> {
                     context.departments().updateDepartment(selected.getID(), newName, context.employees());
                     refreshTable();
-                    FormDialog.showInfo(this, "Department updated successfully!");
+                    Modal.showInfo(this, "Department updated successfully!");
                 });
     }
 
     private void handleDelete() {
         Department selected = table.getSelectedItem();
         if (selected == null) {
-            FormDialog.showWarning(this, "No Selection", "Please select a department to delete.");
+            Modal.showWarning(this, "No Selection", "Please select a department to delete.");
             return;
         }
 
-        boolean confirmed = FormDialog.confirm(
+        boolean confirmed = Modal.confirm(
                 this,
                 "Confirm Delete",
                 "Are you sure you want to delete '" + selected.getName() + "'?");
@@ -118,9 +115,9 @@ public class DepartmentsPage extends AppPage {
             try {
                 context.departments().deleteDepartment(selected.getID(), context.employees());
                 refreshTable();
-                FormDialog.showInfo(this, "Department deleted successfully!");
+                Modal.showInfo(this, "Department deleted successfully!");
             } catch (IllegalArgumentException ex) {
-                FormDialog.showError(this, "Cannot Delete", ex.getMessage());
+                Modal.showError(this, "Cannot Delete", ex.getMessage());
             }
         }
     }

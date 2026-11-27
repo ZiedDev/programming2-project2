@@ -4,7 +4,7 @@ import UI.Components.*;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
 import UI.Theme.AppIcon;
-import UI.Theme.IconColor;
+
 import javax.swing.*;
 import java.awt.*;
 import Model.Department;
@@ -100,17 +100,17 @@ public class EmployeesPage extends AppPage {
     private void handleAdd() {
         List<Department> depts = context.departments().getAllDepartments();
         EmployeeForm form = new EmployeeForm(List.of(new FullTimeForm(depts), new PartTimeForm(depts)));
-        FormDialog.show(this, "Add New Employee", "Add Employee", form, emp -> {
+        Modal.show(this, "Add New Employee", "Add Employee", form, emp -> {
             context.employees().addEmployee(emp);
             refreshTable();
-            FormDialog.showInfo(this, "Employee added successfully!");
+            Modal.showInfo(this, "Employee added successfully!");
         });
     }
 
     private void handleEdit() {
         Employee selected = table.getSelectedItem();
         if (selected == null) {
-            FormDialog.showWarning(this, "No Selection", "Please select an employee to edit.");
+            Modal.showWarning(this, "No Selection", "Please select an employee to edit.");
             return;
         }
 
@@ -119,7 +119,7 @@ public class EmployeesPage extends AppPage {
                 List.of(new FullTimeForm(depts, selected), new PartTimeForm(depts, selected)),
                 selected);
 
-        FormDialog.show(this, "Edit Employee", "Save Changes", AppIcon.EDIT, form, updated -> {
+        Modal.show(this, "Edit Employee", "Save Changes", AppIcon.EDIT, form, updated -> {
             if (updated instanceof FullTimeEmployee ft) {
                 context.employees().updateEmployee(
                         selected.getID(),
@@ -140,18 +140,18 @@ public class EmployeesPage extends AppPage {
                         pt.getHoursPerMonth());
             }
             refreshTable();
-            FormDialog.showInfo(this, "Employee updated successfully!");
+            Modal.showInfo(this, "Employee updated successfully!");
         });
     }
 
     private void handleDelete() {
         Employee selected = table.getSelectedItem();
         if (selected == null) {
-            FormDialog.showWarning(this, "No Selection", "Please select an employee to delete.");
+            Modal.showWarning(this, "No Selection", "Please select an employee to delete.");
             return;
         }
 
-        boolean confirmed = FormDialog.confirm(
+        boolean confirmed = Modal.confirm(
                 this,
                 "Confirm Delete",
                 "Are you sure you want to delete '" + selected.getFullName() + "'?");
@@ -160,9 +160,9 @@ public class EmployeesPage extends AppPage {
             try {
                 context.employees().deleteEmployee(selected.getID());
                 refreshTable();
-                FormDialog.showInfo(this, "Employee deleted successfully!");
+                Modal.showInfo(this, "Employee deleted successfully!");
             } catch (IllegalArgumentException ex) {
-                FormDialog.showError(this, "Cannot Delete", ex.getMessage());
+                Modal.showError(this, "Cannot Delete", ex.getMessage());
             }
         }
     }
