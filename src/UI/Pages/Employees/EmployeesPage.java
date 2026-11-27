@@ -25,7 +25,6 @@ public class EmployeesPage extends AppPage {
     public EmployeesPage(AppContext context) {
         super(context);
         setLayout(new BorderLayout(0,16));
-        setBorder(new EmptyBorder(16, 16, 16, 16));
 
         JPanel top = new JPanel();
         top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
