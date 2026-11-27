@@ -1,10 +1,11 @@
-package UI.Pages.Departments;
+package UI.Pages;
 
 import Model.Department;
 import Model.Employee;
 import UI.Components.AppButton;
 import UI.Components.DataTable;
 import UI.Components.Modal;
+import UI.Forms.DepartmentForm;
 import UI.Components.InputField;
 import UI.Components.LabeledField;
 import UI.Shell.AppContext;

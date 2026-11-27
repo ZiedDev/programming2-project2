@@ -1,4 +1,4 @@
-package UI.Pages.Home;
+package UI.Pages;
 
 import UI.Components.Divider;
 import UI.Components.StatCard;
@@ -9,9 +9,7 @@ import UI.Theme.IconColor;
 import UI.Theme.UITheme;
 
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.function.Consumer;
 
 public class HomePage extends AppPage {
 

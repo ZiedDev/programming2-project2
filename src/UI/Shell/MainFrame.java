@@ -2,10 +2,10 @@ package UI.Shell;
 
 import Service.DepartmentService;
 import Service.EmployeeService;
-import UI.Pages.Departments.DepartmentsPage;
-import UI.Pages.Employees.EmployeesPage;
-import UI.Pages.Home.HomePage;
-import UI.Pages.Login.LoginPage;
+import UI.Pages.DepartmentsPage;
+import UI.Pages.EmployeesPage;
+import UI.Pages.HomePage;
+import UI.Pages.LoginPage;
 import UI.Theme.UITheme;
 
 import javax.swing.*;
@@ -48,7 +48,7 @@ public class MainFrame extends JFrame {
         root.add(contentContainer, BorderLayout.CENTER);
 
         setContentPane(root);
-        navigate(Route.HOME); // TODO: Change to LOGIN
+        navigate(Route.LOGIN);
         setVisible(true);
         setMinimumSize(new Dimension(1024, 768));
     }

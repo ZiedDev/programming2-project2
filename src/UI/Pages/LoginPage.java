@@ -1,4 +1,4 @@
-package UI.Pages.Login;
+package UI.Pages;
 
 import UI.Components.*;
 import UI.Shell.AppContext;

@@ -1,25 +1,14 @@
-package UI.Pages.Departments;
+package UI.Forms;
 
 import UI.Components.*;
 
-import javax.swing.*;
-
-public class DepartmentForm implements FormBuilder<String> {
-    private final JPanel panel = new JPanel();
+public class DepartmentForm extends FormBuilder<String> {
     private final InputField nameField;
 
     public DepartmentForm(String initialName) {
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setOpaque(false);
-
         nameField = new InputField(initialName);
 
-        panel.add(LabeledField.horizontal("Department Name", nameField));
-    }
-
-    @Override
-    public JPanel getPanel() {
-        return panel;
+        add(LabeledField.horizontal("Department Name", nameField));
     }
 
     @Override

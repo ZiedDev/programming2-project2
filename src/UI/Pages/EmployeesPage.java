@@ -1,6 +1,9 @@
-package UI.Pages.Employees;
+package UI.Pages;
 
 import UI.Components.*;
+import UI.Forms.EmployeeForm;
+import UI.Forms.FullTimeForm;
+import UI.Forms.PartTimeForm;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
 import UI.Theme.AppIcon;

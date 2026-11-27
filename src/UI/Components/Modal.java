@@ -21,7 +21,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
 public final class Modal {
-    private Modal() {}
+    private Modal() {
+    }
 
     // Form modals
     public static <T> void show(
@@ -40,7 +41,7 @@ public final class Modal {
             AppIcon submitIcon,
             FormBuilder<T> form,
             Consumer<T> onSubmit) {
-        JDialog dialog = createDialog(anchor, title, UITheme.TEXT_LIGHT, form.getPanel());
+        JDialog dialog = createDialog(anchor, title, UITheme.TEXT_LIGHT, form);
 
         AppButton cancelBtn = AppButton.secondaryAlt("Cancel")
                 .icon(AppIcon.CANCEL, IconColor.LIGHT)

@@ -1,15 +1,13 @@
-package UI.Pages.Employees;
+package UI.Forms;
 
 import Model.Department;
 import Model.Employee;
 import Model.PartTimeEmployee;
 import UI.Components.*;
 
-import javax.swing.*;
 import java.util.List;
 
-public class PartTimeForm implements FormBuilder<Employee> {
-    private final JPanel panel = new JPanel();
+public class PartTimeForm extends FormBuilder<Employee> {
     private final SelectField<Department> deptBox;
     private final InputField nameField = new InputField("");
     private final InputField ageField = new InputField("");
@@ -22,9 +20,6 @@ public class PartTimeForm implements FormBuilder<Employee> {
     }
 
     public PartTimeForm(List<Department> departments, Employee initialEmployee) {
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setOpaque(false);
-
         deptBox = new SelectField<>(departments);
 
         if (initialEmployee != null) {
@@ -38,17 +33,12 @@ public class PartTimeForm implements FormBuilder<Employee> {
             }
         }
 
-        panel.add(LabeledField.horizontal("Full Name", nameField));
-        panel.add(LabeledField.horizontal("Department", deptBox));
-        panel.add(LabeledField.horizontal("Age", ageField));
-        panel.add(LabeledField.horizontal("Position", positionField));
-        panel.add(LabeledField.horizontal("Hourly Rate", rateField));
-        panel.add(LabeledField.horizontal("Hours / Month", hoursField));
-    }
-
-    @Override
-    public JPanel getPanel() {
-        return panel;
+        add(LabeledField.horizontal("Full Name", nameField));
+        add(LabeledField.horizontal("Age", ageField));
+        add(LabeledField.horizontal("Department", deptBox));
+        add(LabeledField.horizontal("Position", positionField));
+        add(LabeledField.horizontal("Hourly Rate", rateField));
+        add(LabeledField.horizontal("Hours / Month", hoursField));
     }
 
     @Override
