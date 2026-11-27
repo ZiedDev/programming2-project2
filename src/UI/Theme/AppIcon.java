@@ -10,6 +10,7 @@ public enum AppIcon {
     LOGOUT("Logout"),
     ADD("Add"),
     CANCEL("Cancel"),
+    TICK("Tick"),
     EDIT("Edit"),
     EMPLOYEE("Employee"),
     DEPARTMENT("Department"),

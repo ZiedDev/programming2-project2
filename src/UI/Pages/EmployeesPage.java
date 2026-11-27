@@ -117,9 +117,9 @@ public class EmployeesPage extends AppPage {
             return;
         }
 
-        List<Department> depts = context.departments().getAllDepartments();
+        List<Department> departments = context.departments().getAllDepartments();
         EmployeeForm form = new EmployeeForm(
-                List.of(new FullTimeForm(depts, selected), new PartTimeForm(depts, selected)),
+                List.of(new FullTimeForm(departments, selected), new PartTimeForm(departments, selected)),
                 selected);
 
         Modal.show(this, "Edit Employee", "Save Changes", AppIcon.EDIT, form, updated -> {

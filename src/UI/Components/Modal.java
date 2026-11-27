@@ -66,15 +66,15 @@ public final class Modal {
 
     // Alert & confirm dialogs
     public static void showInfo(Component anchor, String message) {
-        showMessage(anchor, "Info", message, UITheme.TEXT_LIGHT, AppButton.primary("OK"));
+        showMessage(anchor, "Info", message, UITheme.TEXT_LIGHT, AppButton.primary("OK").icon(AppIcon.TICK));
     }
 
     public static void showWarning(Component anchor, String title, String message) {
-        showMessage(anchor, title, message, UITheme.PRIMARY, AppButton.primary("OK"));
+        showMessage(anchor, title, message, UITheme.PRIMARY, AppButton.primary("OK").icon(AppIcon.TICK));
     }
 
     public static void showError(Component anchor, String title, String message) {
-        showMessage(anchor, title, message, UITheme.DANGER, AppButton.danger("OK"));
+        showMessage(anchor, title, message, UITheme.DANGER, AppButton.danger("OK").icon(AppIcon.TICK));
     }
 
     public static boolean confirm(Component anchor, String title, String message) {
@@ -87,6 +87,7 @@ public final class Modal {
                 .onClick(dialog::dispose);
 
         AppButton yesBtn = AppButton.danger("Yes")
+                .icon(AppIcon.TICK)
                 .onClick(() -> {
                     confirmed.set(true);
                     dialog.dispose();
