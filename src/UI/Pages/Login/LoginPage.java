@@ -49,9 +49,9 @@ public class LoginPage extends AppPage {
         Divider separator = Divider.horizontal();
         separator.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        InputFieldNew usernameField = new InputFieldNew();
+        InputField usernameField = new InputField();
         usernameField.setPreferredSize(new Dimension(420, 36));
-        LabeledField<InputFieldNew> usernameRow = LabeledField.vertical("Username", usernameField);
+        LabeledField<InputField> usernameRow = LabeledField.vertical("Username", usernameField);
         usernameRow.setPreferredSize(new Dimension(420, usernameRow.getPreferredSize().height));
 
         PasswordField passwordField = new PasswordField();

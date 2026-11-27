@@ -11,11 +11,11 @@ import java.util.List;
 public class FullTimeForm implements FormBuilder<Employee> {
     private final JPanel panel = new JPanel();
     private final SelectField<Department> deptBox;
-    private final InputFieldNew nameField = new InputFieldNew("");
-    private final InputFieldNew ageField = new InputFieldNew("");
-    private final InputFieldNew positionField = new InputFieldNew("");
-    private final InputFieldNew salaryField = new InputFieldNew("");
-    private final InputFieldNew bonusField = new InputFieldNew("");
+    private final InputField nameField = new InputField("");
+    private final InputField ageField = new InputField("");
+    private final InputField positionField = new InputField("");
+    private final InputField salaryField = new InputField("");
+    private final InputField bonusField = new InputField("");
 
     public FullTimeForm(List<Department> departments) {
         this(departments, null);

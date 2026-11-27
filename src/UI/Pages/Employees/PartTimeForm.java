@@ -11,11 +11,11 @@ import java.util.List;
 public class PartTimeForm implements FormBuilder<Employee> {
     private final JPanel panel = new JPanel();
     private final SelectField<Department> deptBox;
-    private final InputFieldNew nameField = new InputFieldNew("");
-    private final InputFieldNew ageField = new InputFieldNew("");
-    private final InputFieldNew positionField = new InputFieldNew("");
-    private final InputFieldNew rateField = new InputFieldNew("");
-    private final InputFieldNew hoursField = new InputFieldNew("");
+    private final InputField nameField = new InputField("");
+    private final InputField ageField = new InputField("");
+    private final InputField positionField = new InputField("");
+    private final InputField rateField = new InputField("");
+    private final InputField hoursField = new InputField("");
 
     public PartTimeForm(List<Department> departments) {
         this(departments, null);

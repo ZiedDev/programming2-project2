@@ -1,6 +1,5 @@
 package UI.Pages.Home;
 
-import UI.Components.ComponentFactory;
 import UI.Components.Divider;
 import UI.Components.StatCard;
 import UI.Shell.AppContext;

@@ -40,9 +40,9 @@ public class EmployeesPage extends AppPage {
         searchParams.setOpaque(false);
         searchParams.setAlignmentX(LEFT_ALIGNMENT);
 
-        InputFieldNew searchField = new InputFieldNew("", 10)
+        InputField searchField = new InputField("", 10)
                 .onChange(newValue -> table.model.loadEmployees(employeeService.searchByName(newValue)));
-        LabeledField<InputFieldNew> employeeSearchRow = LabeledField.vertical("Search by name", searchField);
+        LabeledField<InputField> employeeSearchRow = LabeledField.vertical("Search by name", searchField);
 
         List<String> options = new ArrayList<>(List.of(""));
         for (Department x : deptService.getAllDepartments()) {

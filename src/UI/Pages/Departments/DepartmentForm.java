@@ -6,13 +6,13 @@ import javax.swing.*;
 
 public class DepartmentForm implements FormBuilder<String> {
     private final JPanel panel = new JPanel();
-    private final InputFieldNew nameField;
+    private final InputField nameField;
 
     public DepartmentForm(String initialName) {
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setOpaque(false);
 
-        nameField = new InputFieldNew(initialName);
+        nameField = new InputField(initialName);
 
         panel.add(LabeledField.horizontal("Department Name", nameField));
     }

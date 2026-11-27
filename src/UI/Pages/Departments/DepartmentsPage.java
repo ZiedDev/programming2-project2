@@ -1,75 +1,51 @@
 package UI.Pages.Departments;
 
 import Model.Department;
-import Service.DepartmentService;
-import Service.EmployeeService;
-import UI.Components.*;
-import UI.Components.Popup;
+import Model.Employee;
+import UI.Components.AppButton;
+import UI.Components.DataTable;
+import UI.Components.FormDialog;
+import UI.Components.InputField;
+import UI.Components.LabeledField;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
-import UI.Theme.UITheme;
 import UI.Theme.AppIcon;
 import UI.Theme.IconColor;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-import java.awt.*;
+
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JPanel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.util.ArrayList;
 import java.util.List;
 
 public class DepartmentsPage extends AppPage {
-    private final DepartmentService departmentService;
-    private final EmployeeService employeeService;
+    private static final String[] TABLE_COLUMNS = { "Department Name", "ID", "Employees", "Monthly Payroll" };
 
-    private final DepartmentsTable table;
-    private final StatCard totalDeptsCard;
-    private final StatCard totalEmpsCard;
+    private final DataTable<Department> table;
     private String currentSearch = "";
 
     public DepartmentsPage(AppContext context) {
         super(context);
-        this.departmentService = context.departments();
-        this.employeeService = context.employees();
-
-        this.setLayout(new BorderLayout(0, 16));
-        this.setBackground(UITheme.BG_DARK);
-        this.setBorder(new EmptyBorder(24, 24, 24, 24));
+        setLayout(new BorderLayout(0, 16));
 
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new BoxLayout(topPanel, BoxLayout.Y_AXIS));
         topPanel.setOpaque(false);
 
-        JLabel title = new JLabel("Departments");
-        title.setFont(UITheme.FONT_TITLE);
-        title.setForeground(UITheme.TEXT_LIGHT);
-        title.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        Divider separator = Divider.horizontal();
-        separator.setAlignmentX(Component.LEFT_ALIGNMENT);
-
-        JPanel statsRow = new JPanel(new GridLayout(1, 2, 10, 0));
-        statsRow.setOpaque(false);
-        statsRow.setAlignmentX(Component.LEFT_ALIGNMENT);
-        statsRow.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
-
-        totalDeptsCard = new StatCard("Total Departments", 0).icon(AppIcon.DEPARTMENT, IconColor.DARK);
-        totalEmpsCard = new StatCard("Total Employees", 0).icon(AppIcon.EMPLOYEE, IconColor.DARK);
-        statsRow.add(totalDeptsCard);
-        statsRow.add(totalEmpsCard);
-
-        InputFieldNew searchField = new InputFieldNew("", 20)
+        InputField searchField = new InputField("", 20)
                 .onChange(query -> {
                     this.currentSearch = query;
                     refreshTable();
                 });
-        LabeledField<InputFieldNew> searchRow = LabeledField.horizontal("Search by Name:", searchField);
+        LabeledField<InputField> searchRow = LabeledField.horizontal("Search by Name:", searchField);
 
-        topPanel.add(title);
-        topPanel.add(separator);
-        topPanel.add(statsRow);
-        topPanel.add(Box.createRigidArea(new Dimension(0, 14)));
+        topPanel.add(createHeader("Departments"));
         topPanel.add(searchRow);
 
-        table = new DepartmentsTable();
+        table = new DataTable<>(TABLE_COLUMNS, this::toRow);
 
         JPanel buttonsRow = new JPanel(new GridLayout(1, 3, 12, 0));
         buttonsRow.setOpaque(false);
@@ -91,69 +67,74 @@ public class DepartmentsPage extends AppPage {
         buttonsRow.add(editBtn);
         buttonsRow.add(deleteBtn);
 
-        this.add(topPanel, BorderLayout.NORTH);
-        this.add(table.scrollPane, BorderLayout.CENTER);
-        this.add(buttonsRow, BorderLayout.SOUTH);
+        add(topPanel, BorderLayout.NORTH);
+        add(table, BorderLayout.CENTER);
+        add(buttonsRow, BorderLayout.SOUTH);
 
         refreshTable();
     }
 
-    private void handleAdd() {
-        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-        DepartmentForm form = new DepartmentForm("");
+    @Override
+    public void onShow() {
+        refreshTable();
+    }
 
-        Popup.showForm(parent, "Add Department", "Add", form, deptName -> {
-            departmentService.addDepartment(deptName);
-            refreshTable();
-            JOptionPane.showMessageDialog(this, "Department added successfully!");
-        });
+    private void handleAdd() {
+        new FormDialog<>(new DepartmentForm(""))
+                .title("Add Department")
+                .submitLabel("Add")
+                .onSubmit(deptName -> {
+                    context.departments().addDepartment(deptName);
+                    refreshTable();
+                    FormDialog.showInfo(this, "Department added successfully!");
+                })
+                .show(this);
     }
 
     private void handleEdit() {
-        Department selected = table.getSelectedDepartment();
+        Department selected = table.getSelectedItem();
         if (selected == null) {
-            JOptionPane.showMessageDialog(this, "Please select a department to edit.", "No Selection",
-                    JOptionPane.WARNING_MESSAGE);
+            FormDialog.showWarning(this, "No Selection", "Please select a department to edit.");
             return;
         }
 
-        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-        DepartmentForm form = new DepartmentForm(selected.getName());
-
-        Popup.showForm(parent, "Edit Department", "Save Changes", form, newName -> {
-            departmentService.updateDepartment(selected.getID(), newName, employeeService);
-            refreshTable();
-            JOptionPane.showMessageDialog(this, "Department updated successfully!");
-        });
+        new FormDialog<>(new DepartmentForm(selected.getName()))
+                .title("Edit Department")
+                .submitLabel("Save Changes")
+                .submitIcon(AppIcon.EDIT)
+                .onSubmit(newName -> {
+                    context.departments().updateDepartment(selected.getID(), newName, context.employees());
+                    refreshTable();
+                    FormDialog.showInfo(this, "Department updated successfully!");
+                })
+                .show(this);
     }
 
     private void handleDelete() {
-        Department selected = table.getSelectedDepartment();
+        Department selected = table.getSelectedItem();
         if (selected == null) {
-            JOptionPane.showMessageDialog(this, "Please select a department to delete.", "No Selection",
-                    JOptionPane.WARNING_MESSAGE);
+            FormDialog.showWarning(this, "No Selection", "Please select a department to delete.");
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(
+        boolean confirmed = FormDialog.confirm(
                 this,
-                "Are you sure you want to delete '" + selected.getName() + "'?",
                 "Confirm Delete",
-                JOptionPane.YES_NO_OPTION);
+                "Are you sure you want to delete '" + selected.getName() + "'?");
 
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirmed) {
             try {
-                departmentService.deleteDepartment(selected.getID(), employeeService);
+                context.departments().deleteDepartment(selected.getID(), context.employees());
                 refreshTable();
-                JOptionPane.showMessageDialog(this, "Department deleted successfully!");
+                FormDialog.showInfo(this, "Department deleted successfully!");
             } catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Cannot Delete", JOptionPane.ERROR_MESSAGE);
+                FormDialog.showError(this, "Cannot Delete", ex.getMessage());
             }
         }
     }
 
     public void refreshTable() {
-        List<Department> allDepts = departmentService.getAllDepartments();
+        List<Department> allDepts = context.departments().getAllDepartments();
         List<Department> filtered = new ArrayList<>();
 
         String query = currentSearch.trim().toLowerCase();
@@ -163,8 +144,25 @@ public class DepartmentsPage extends AppPage {
             }
         }
 
-        table.model.loadDepartments(filtered, employeeService.getAllEmployees());
-        totalDeptsCard.setValue(allDepts.size());
-        totalEmpsCard.setValue(context.employees().getAllEmployees().size());
+        table.setItems(filtered);
+    }
+
+    private Object[] toRow(Department dept) {
+        int empCount = 0;
+        double totalPayroll = 0.0;
+
+        for (Employee emp : context.employees().getAllEmployees()) {
+            if (emp.getDepartment() != null && dept.getID().equals(emp.getDepartment().getID())) {
+                empCount++;
+                totalPayroll += emp.getMonthlySalary();
+            }
+        }
+
+        return new Object[] {
+                dept.getName(),
+                dept.getID(),
+                empCount,
+                String.format("%.2f EGP", totalPayroll)
+        };
     }
 }

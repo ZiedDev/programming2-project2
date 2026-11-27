@@ -1,14 +1,21 @@
 package UI.Components;
 
-import javax.swing.JComboBox;
+import UI.Theme.UITheme;
+
+import javax.swing.*;
 import java.util.List;
 import java.util.function.Consumer;
 
 public class SelectField<T> extends JComboBox<T> {
     public SelectField() {
+        setBackground(UITheme.BG_DARK);
+        setForeground(UITheme.TEXT_LIGHT);
+        setFont(UITheme.FONT_BODY);
+        setFocusable(false);
     }
 
     public SelectField(List<T> items) {
+        this();
         options(items);
     }
 
