@@ -6,7 +6,6 @@ import UI.Shell.AppPage;
 import UI.Theme.AppIcon;
 import UI.Theme.IconColor;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import Model.Department;
 import Model.Employee;
@@ -17,14 +16,15 @@ import java.util.ArrayList;
 import UI.Components.Popup;
 
 public class EmployeesPage extends AppPage {
-    private static final String[] TABLE_COLUMNS = {"Name","ID","Department","Position","Salary"};
+    private static final String[] TABLE_COLUMNS = { "Name", "ID", "Department", "Position", "Salary" };
     private final DataTable<Employee> table;
     private String currentSearch = "";
     private String currDepartmentName = "";
     SelectField<String> deptsBox;
+
     public EmployeesPage(AppContext context) {
         super(context);
-        setLayout(new BorderLayout(0,16));
+        setLayout(new BorderLayout(0, 16));
 
         JPanel top = new JPanel();
         top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
@@ -34,7 +34,7 @@ public class EmployeesPage extends AppPage {
         searchParams.setOpaque(false);
         searchParams.setAlignmentX(LEFT_ALIGNMENT);
 
-        table = new DataTable<>(TABLE_COLUMNS,this::toRow);
+        table = new DataTable<>(TABLE_COLUMNS, this::toRow);
 
         InputField searchField = new InputField("", 10)
                 .onChange(query -> {
@@ -172,26 +172,28 @@ public class EmployeesPage extends AppPage {
         }
     }
 
-    public void refreshTable(){
+    public void refreshTable() {
         List<Employee> allEmployees = context.employees().getAllEmployees();
         List<Employee> filtered = new ArrayList<>();
         String nameQuery = currentSearch.trim().toLowerCase();
         String deptQuery = currDepartmentName.trim().toLowerCase();
-        for(Employee emp : allEmployees){
-            if(nameQuery.isEmpty() || (emp.getFullName().toLowerCase().contains(nameQuery) && emp.getDepartment().getName().equals(deptQuery))){
+        for (Employee emp : allEmployees) {
+            System.out.println(emp.getFullName() + nameQuery);
+            if ((nameQuery.isEmpty() || emp.getFullName().toLowerCase().contains(nameQuery))
+                    && (deptQuery.isEmpty() || emp.getDepartment().getName().toLowerCase().contains(deptQuery))) {
                 filtered.add(emp);
             }
         }
         table.setItems(filtered);
     }
 
-    private Object[] toRow(Employee emp){
+    private Object[] toRow(Employee emp) {
         return new Object[] {
-            emp.getFullName(),
-            emp.getID(),
-            emp.getDepartment().getName(),
-            emp.getPosition(),
-            emp.getMonthlySalary()
+                emp.getFullName(),
+                emp.getID(),
+                emp.getDepartment().getName(),
+                emp.getPosition(),
+                emp.getMonthlySalary()
         };
     }
 }
