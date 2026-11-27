@@ -4,7 +4,7 @@ import Model.Department;
 import Service.DepartmentService;
 import Service.EmployeeService;
 import UI.Components.*;
-import UI.Popup;
+import UI.Components.Popup;
 import UI.Shell.AppContext;
 import UI.Shell.AppPage;
 import UI.Theme.UITheme;

@@ -1,6 +1,6 @@
 package UI.Components;
 
-import UI.Popup;
+import UI.PopupOld;
 import UI.Theme.UITheme;
 import UI.Theme.AppIcon;
 import UI.Theme.IconColor;
@@ -90,8 +90,8 @@ public class ComponentFactory {
         return row;
     }
     
-    public static UI.Popup createPopup(String title, JFrame parent) {
-        UI.Popup x = new Popup(title, parent);
+    public static UI.PopupOld createPopup(String title, JFrame parent) {
+        UI.PopupOld x = new PopupOld(title, parent);
         return x;
     }
 }

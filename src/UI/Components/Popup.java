@@ -1,4 +1,4 @@
-package UI;
+package UI.Components;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -12,8 +12,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.border.EmptyBorder;
 
-import UI.Components.AppButton;
-import UI.Components.Divider;
 import UI.Theme.UITheme;
 import UI.Theme.AppIcon;
 import UI.Theme.IconColor;
@@ -22,17 +20,14 @@ import javax.swing.SwingConstants;
 import java.awt.FlowLayout;
 import java.util.function.Consumer;
 
-import UI.Components.FormBuilder;
-
-public class Popup {
-    private JDialog dialog;
+public class Popup extends JDialog {
     private JPanel panel;
     private JPanel bodyPanel;
     private JPanel footerPanel;
 
     public Popup(String titleText, JFrame parent) {
-        dialog = new JDialog(parent, titleText, true);
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        super(parent, titleText, true);
+        this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         panel = new JPanel();
         panel.setBackground(UITheme.BG_DARK);
@@ -66,23 +61,23 @@ public class Popup {
 
         panel.add(footerPanel, BorderLayout.SOUTH);
 
-        dialog.add(panel);
+        this.setContentPane(panel);
 
         return;
     }
 
     public void showPopup(JFrame parent) {
-        dialog.pack();
-        dialog.setLocationRelativeTo(parent);
-        dialog.setVisible(true);
+        this.pack();
+        this.setLocationRelativeTo(parent);
+        this.setVisible(true);
     }
 
     public void repack() {
-        dialog.pack();
+        this.pack();
     }
 
     public void close() {
-        dialog.dispose();
+        this.dispose();
     }
 
     public void addBodyComponent(Component c) {
@@ -116,7 +111,7 @@ public class Popup {
                         popup.close();
                     } catch (IllegalArgumentException ex) {
                         JOptionPane.showMessageDialog(
-                                popup.dialog, ex.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
+                                popup, ex.getMessage(), "Invalid Input", JOptionPane.ERROR_MESSAGE);
                     }
                 });
 

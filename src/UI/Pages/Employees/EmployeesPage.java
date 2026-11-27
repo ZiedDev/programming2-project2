@@ -16,7 +16,7 @@ import Service.EmployeeService;
 import Service.DepartmentService;
 import java.util.List;
 import java.util.ArrayList;
-import UI.Popup;
+import UI.Components.Popup;
 
 public class EmployeesPage extends AppPage {
     SelectField<String> deptsBox;
