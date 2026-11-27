@@ -34,6 +34,6 @@ public final class UITheme {
     public static final int ICON_SIZE            = 24;
     public static final int BUTTON_HEIGHT        = 64;
     public static final int FORM_CONTROL_COLUMNS = 20;
-    public static final int FORM_CONTROL_WIDTH   = 220;
+    public static final int FORM_CONTROL_WIDTH   = 302;
     public static final int TABLE_ROW_HEIGHT     = 28;
 }

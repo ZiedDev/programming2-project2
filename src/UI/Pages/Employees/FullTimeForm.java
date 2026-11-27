@@ -38,7 +38,7 @@ public class FullTimeForm implements FormBuilder<Employee> {
             }
         }
 
-        panel.add(LabeledField.horizontal("Full name", nameField));
+        panel.add(LabeledField.horizontal("Full Name", nameField));
         panel.add(LabeledField.horizontal("Department", deptBox));
         panel.add(LabeledField.horizontal("Age", ageField));
         panel.add(LabeledField.horizontal("Position", positionField));

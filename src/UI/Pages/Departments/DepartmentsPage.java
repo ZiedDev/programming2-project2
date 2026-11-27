@@ -51,15 +51,15 @@ public class DepartmentsPage extends AppPage {
         buttonsRow.setOpaque(false);
 
         AppButton addBtn = AppButton.primary("Add Department")
-                .icon(AppIcon.ADD, IconColor.DARK)
+                .icon(AppIcon.ADD)
                 .alignLeft()
                 .onClick(this::handleAdd);
         AppButton editBtn = AppButton.secondaryAlt("Edit Selected")
-                .icon(AppIcon.EDIT, IconColor.LIGHT)
+                .icon(AppIcon.EDIT)
                 .alignLeft()
                 .onClick(this::handleEdit);
         AppButton deleteBtn = AppButton.danger("Delete Selected")
-                .icon(AppIcon.CANCEL, IconColor.DANGER)
+                .icon(AppIcon.CANCEL)
                 .alignLeft()
                 .onClick(this::handleDelete);
 
@@ -80,15 +80,11 @@ public class DepartmentsPage extends AppPage {
     }
 
     private void handleAdd() {
-        new FormDialog<>(new DepartmentForm(""))
-                .title("Add Department")
-                .submitLabel("Add")
-                .onSubmit(deptName -> {
-                    context.departments().addDepartment(deptName);
-                    refreshTable();
-                    FormDialog.showInfo(this, "Department added successfully!");
-                })
-                .show(this);
+        FormDialog.show(this, "Add Department", "Add Department", new DepartmentForm(""), deptName -> {
+            context.departments().addDepartment(deptName);
+            refreshTable();
+            FormDialog.showInfo(this, "Department added successfully!");
+        });
     }
 
     private void handleEdit() {
@@ -98,16 +94,12 @@ public class DepartmentsPage extends AppPage {
             return;
         }
 
-        new FormDialog<>(new DepartmentForm(selected.getName()))
-                .title("Edit Department")
-                .submitLabel("Save Changes")
-                .submitIcon(AppIcon.EDIT)
-                .onSubmit(newName -> {
+        FormDialog.show(this, "Edit Department", "Save Changes", AppIcon.EDIT,
+                new DepartmentForm(selected.getName()), newName -> {
                     context.departments().updateDepartment(selected.getID(), newName, context.employees());
                     refreshTable();
                     FormDialog.showInfo(this, "Department updated successfully!");
-                })
-                .show(this);
+                });
     }
 
     private void handleDelete() {

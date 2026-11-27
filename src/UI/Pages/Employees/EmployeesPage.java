@@ -13,7 +13,6 @@ import Model.FullTimeEmployee;
 import Model.PartTimeEmployee;
 import java.util.List;
 import java.util.ArrayList;
-import UI.Components.Popup;
 
 public class EmployeesPage extends AppPage {
     private static final String[] TABLE_COLUMNS = { "Name", "ID", "Department", "Position", "Salary" };
@@ -56,15 +55,15 @@ public class EmployeesPage extends AppPage {
         buttonsRow.setOpaque(false);
 
         AppButton addBtn = AppButton.primary("Add New Employee")
-                .icon(AppIcon.ADD, IconColor.DARK)
+                .icon(AppIcon.ADD)
                 .alignLeft()
                 .onClick(this::handleAdd);
         AppButton editBtn = AppButton.secondaryAlt("Edit Selected")
-                .icon(AppIcon.EDIT, IconColor.LIGHT)
+                .icon(AppIcon.EDIT)
                 .alignLeft()
                 .onClick(this::handleEdit);
         AppButton deleteBtn = AppButton.danger("Delete Selected")
-                .icon(AppIcon.CANCEL, IconColor.DANGER)
+                .icon(AppIcon.CANCEL)
                 .alignLeft()
                 .onClick(this::handleDelete);
 
@@ -99,30 +98,28 @@ public class EmployeesPage extends AppPage {
     }
 
     private void handleAdd() {
-        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
         List<Department> depts = context.departments().getAllDepartments();
         EmployeeForm form = new EmployeeForm(List.of(new FullTimeForm(depts), new PartTimeForm(depts)));
-        Popup.showForm(parent, "Add new Employee", "Add Employee", form, emp -> {
+        FormDialog.show(this, "Add New Employee", "Add Employee", form, emp -> {
             context.employees().addEmployee(emp);
             refreshTable();
+            FormDialog.showInfo(this, "Employee added successfully!");
         });
     }
 
     private void handleEdit() {
         Employee selected = table.getSelectedItem();
         if (selected == null) {
-            JOptionPane.showMessageDialog(this, "Please select an employee to edit.", "No Selection",
-                    JOptionPane.WARNING_MESSAGE);
+            FormDialog.showWarning(this, "No Selection", "Please select an employee to edit.");
             return;
         }
 
-        JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
         List<Department> depts = context.departments().getAllDepartments();
         EmployeeForm form = new EmployeeForm(
                 List.of(new FullTimeForm(depts, selected), new PartTimeForm(depts, selected)),
                 selected);
 
-        Popup.showForm(parent, "Edit Employee", "Save Changes", form, updated -> {
+        FormDialog.show(this, "Edit Employee", "Save Changes", AppIcon.EDIT, form, updated -> {
             if (updated instanceof FullTimeEmployee ft) {
                 context.employees().updateEmployee(
                         selected.getID(),
@@ -143,31 +140,29 @@ public class EmployeesPage extends AppPage {
                         pt.getHoursPerMonth());
             }
             refreshTable();
-            JOptionPane.showMessageDialog(this, "Employee updated successfully!");
+            FormDialog.showInfo(this, "Employee updated successfully!");
         });
     }
 
     private void handleDelete() {
         Employee selected = table.getSelectedItem();
         if (selected == null) {
-            JOptionPane.showMessageDialog(this, "Please select an employee to delete.", "No Selection",
-                    JOptionPane.WARNING_MESSAGE);
+            FormDialog.showWarning(this, "No Selection", "Please select an employee to delete.");
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(
+        boolean confirmed = FormDialog.confirm(
                 this,
-                "Are you sure you want to delete '" + selected.getFullName() + "'?",
                 "Confirm Delete",
-                JOptionPane.YES_NO_OPTION);
+                "Are you sure you want to delete '" + selected.getFullName() + "'?");
 
-        if (confirm == JOptionPane.YES_OPTION) {
+        if (confirmed) {
             try {
                 context.employees().deleteEmployee(selected.getID());
                 refreshTable();
-                JOptionPane.showMessageDialog(this, "Employee deleted successfully!");
+                FormDialog.showInfo(this, "Employee deleted successfully!");
             } catch (IllegalArgumentException ex) {
-                JOptionPane.showMessageDialog(this, ex.getMessage(), "Cannot Delete", JOptionPane.ERROR_MESSAGE);
+                FormDialog.showError(this, "Cannot Delete", ex.getMessage());
             }
         }
     }

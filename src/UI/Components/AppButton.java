@@ -27,7 +27,7 @@ public class AppButton extends JButton {
     }
 
     public static AppButton primary(String text) {
-        return new AppButton(text, UITheme.PRIMARY, UITheme.TEXT_DARK, IconColor.DARK);
+        return new AppButton(text, UITheme.PRIMARY, UITheme.TEXT_DARK, IconColor.ACCENT);
     }
 
     public static AppButton secondary(String text) {
@@ -35,7 +35,7 @@ public class AppButton extends JButton {
     }
 
     public static AppButton danger(String text) {
-        return new AppButton(text, UITheme.DANGER, UITheme.TEXT_DARK, IconColor.DARK);
+        return new AppButton(text, UITheme.DANGER, UITheme.TEXT_DARK, IconColor.DANGER);
     }
 
     public static AppButton secondaryAlt(String text) {
