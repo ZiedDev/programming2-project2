@@ -12,25 +12,20 @@ import Model.Department;
 import Model.Employee;
 import Model.FullTimeEmployee;
 import Model.PartTimeEmployee;
-import Service.EmployeeService;
-import Service.DepartmentService;
 import java.util.List;
 import java.util.ArrayList;
 import UI.Components.Popup;
 
 public class EmployeesPage extends AppPage {
+    private static final String[] TABLE_COLUMNS = {"Name","ID","Department","Position","Salary"};
+    private final DataTable<Employee> table;
+    private String currentSearch = "";
+    private String currDepartmentName = "";
     SelectField<String> deptsBox;
-    EmployeeService employeeService = context.employees();
-    DepartmentService deptService = context.departments();
-    EmployeesTable table;
     public EmployeesPage(AppContext context) {
         super(context);
-        setLayout(new BorderLayout(10, 10));
+        setLayout(new BorderLayout(0,16));
         setBorder(new EmptyBorder(16, 16, 16, 16));
-
-        List<Employee> employees = employeeService.getAllEmployees();
-        table = new EmployeesTable();
-        table.model.loadEmployees(employees);
 
         JPanel top = new JPanel();
         top.setLayout(new BoxLayout(top, BoxLayout.Y_AXIS));
@@ -40,16 +35,23 @@ public class EmployeesPage extends AppPage {
         searchParams.setOpaque(false);
         searchParams.setAlignmentX(LEFT_ALIGNMENT);
 
+        table = new DataTable<>(TABLE_COLUMNS,this::toRow);
+
         InputField searchField = new InputField("", 10)
-                .onChange(newValue -> table.model.loadEmployees(employeeService.searchByName(newValue)));
+                .onChange(query -> {
+                    this.currentSearch = query;
+                    refreshTable();
+                });
         LabeledField<InputField> employeeSearchRow = LabeledField.vertical("Search by name", searchField);
 
         List<String> options = new ArrayList<>(List.of(""));
-        for (Department x : deptService.getAllDepartments()) {
+        for (Department x : context.departments().getAllDepartments()) {
             options.add(x.getName());
         }
-        deptsBox = new SelectField<>(options).onChange(
-                newValue -> table.model.loadEmployees(employeeService.filterByDepartment(newValue)));
+        deptsBox = new SelectField<>(options).onChange(newValue -> {
+            this.currDepartmentName = newValue;
+            refreshTable();
+        });
 
         JPanel buttonsRow = new JPanel(new GridLayout(1, 3, 12, 0));
         buttonsRow.setOpaque(false);
@@ -79,7 +81,7 @@ public class EmployeesPage extends AppPage {
 
         add(buttonsRow, BorderLayout.SOUTH);
         add(top, BorderLayout.NORTH);
-        add(table.scrollPane, BorderLayout.CENTER);
+        add(table, BorderLayout.CENTER);
 
         refresh();
     }
@@ -91,7 +93,7 @@ public class EmployeesPage extends AppPage {
     // what to update when the page is refreshed
     private void refresh() {
         List<String> options = new ArrayList<>(List.of(""));
-        for (Department x : deptService.getAllDepartments()) {
+        for (Department x : context.departments().getAllDepartments()) {
             options.add(x.getName());
         }
         deptsBox.options(options);
@@ -99,16 +101,16 @@ public class EmployeesPage extends AppPage {
 
     private void handleAdd() {
         JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-        List<Department> depts = deptService.getAllDepartments();
+        List<Department> depts = context.departments().getAllDepartments();
         EmployeeForm form = new EmployeeForm(List.of(new FullTimeForm(depts), new PartTimeForm(depts)));
         Popup.showForm(parent, "Add new Employee", "Add Employee", form, emp -> {
-            employeeService.addEmployee(emp);
-            table.model.loadEmployees(employeeService.getAllEmployees());
+            context.employees().addEmployee(emp);
+            refreshTable();
         });
     }
 
     private void handleEdit() {
-        Employee selected = table.getSelectedEmployee();
+        Employee selected = table.getSelectedItem();
         if (selected == null) {
             JOptionPane.showMessageDialog(this, "Please select an employee to edit.", "No Selection",
                     JOptionPane.WARNING_MESSAGE);
@@ -116,14 +118,14 @@ public class EmployeesPage extends AppPage {
         }
 
         JFrame parent = (JFrame) SwingUtilities.getWindowAncestor(this);
-        List<Department> depts = deptService.getAllDepartments();
+        List<Department> depts = context.departments().getAllDepartments();
         EmployeeForm form = new EmployeeForm(
                 List.of(new FullTimeForm(depts, selected), new PartTimeForm(depts, selected)),
                 selected);
 
         Popup.showForm(parent, "Edit Employee", "Save Changes", form, updated -> {
             if (updated instanceof FullTimeEmployee ft) {
-                employeeService.updateEmployee(
+                context.employees().updateEmployee(
                         selected.getID(),
                         ft.getFullName(),
                         ft.getDepartment(),
@@ -132,7 +134,7 @@ public class EmployeesPage extends AppPage {
                         ft.getBasicSalary(),
                         ft.getBonus());
             } else if (updated instanceof PartTimeEmployee pt) {
-                employeeService.updateEmployee(
+                context.employees().updateEmployee(
                         selected.getID(),
                         pt.getFullName(),
                         pt.getDepartment(),
@@ -141,13 +143,13 @@ public class EmployeesPage extends AppPage {
                         pt.getHourlyRate(),
                         pt.getHoursPerMonth());
             }
-            table.model.loadEmployees(employeeService.getAllEmployees());
+            refreshTable();
             JOptionPane.showMessageDialog(this, "Employee updated successfully!");
         });
     }
 
     private void handleDelete() {
-        Employee selected = table.getSelectedEmployee();
+        Employee selected = table.getSelectedItem();
         if (selected == null) {
             JOptionPane.showMessageDialog(this, "Please select an employee to delete.", "No Selection",
                     JOptionPane.WARNING_MESSAGE);
@@ -162,12 +164,35 @@ public class EmployeesPage extends AppPage {
 
         if (confirm == JOptionPane.YES_OPTION) {
             try {
-                employeeService.deleteEmployee(selected.getID());
-                table.model.loadEmployees(employeeService.getAllEmployees());
+                context.employees().deleteEmployee(selected.getID());
+                refreshTable();
                 JOptionPane.showMessageDialog(this, "Employee deleted successfully!");
             } catch (IllegalArgumentException ex) {
                 JOptionPane.showMessageDialog(this, ex.getMessage(), "Cannot Delete", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    public void refreshTable(){
+        List<Employee> allEmployees = context.employees().getAllEmployees();
+        List<Employee> filtered = new ArrayList<>();
+        String nameQuery = currentSearch.trim().toLowerCase();
+        String deptQuery = currDepartmentName.trim().toLowerCase();
+        for(Employee emp : allEmployees){
+            if(nameQuery.isEmpty() || (emp.getFullName().toLowerCase().contains(nameQuery) && emp.getDepartment().getName().equals(deptQuery))){
+                filtered.add(emp);
+            }
+        }
+        table.setItems(filtered);
+    }
+
+    private Object[] toRow(Employee emp){
+        return new Object[] {
+            emp.getFullName(),
+            emp.getID(),
+            emp.getDepartment().getName(),
+            emp.getPosition(),
+            emp.getMonthlySalary()
+        };
     }
 }
