@@ -43,7 +43,7 @@ public class EmployeesPage extends AppPage {
                     this.currentSearch = query;
                     refreshTable();
                 });
-        LabeledField<InputField> employeeSearchRow = LabeledField.vertical("Search by name", searchField);
+        LabeledField<InputField> employeeSearchRow = LabeledField.vertical("Search by Name / ID:", searchField);
 
         List<String> options = new ArrayList<>(List.of(""));
         for (Department x : context.departments().getAllDepartments()) {
@@ -176,7 +176,8 @@ public class EmployeesPage extends AppPage {
         String nameQuery = currentSearch.trim().toLowerCase();
         String deptQuery = currDepartmentName.trim().toLowerCase();
         for (Employee emp : allEmployees) {
-            if ((nameQuery.isEmpty() || emp.getFullName().toLowerCase().contains(nameQuery))
+            if ((nameQuery.isEmpty() || emp.getFullName().toLowerCase().contains(nameQuery)
+                    || emp.getID().toLowerCase().contains(nameQuery))
                     && (deptQuery.isEmpty() || emp.getDepartment().getName().toLowerCase().contains(deptQuery))) {
                 filtered.add(emp);
             }

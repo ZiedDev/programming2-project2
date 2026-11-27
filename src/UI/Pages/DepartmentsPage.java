@@ -38,7 +38,7 @@ public class DepartmentsPage extends AppPage {
                     this.currentSearch = query;
                     refreshTable();
                 });
-        LabeledField<InputField> searchRow = LabeledField.horizontal("Search by Name:", searchField);
+        LabeledField<InputField> searchRow = LabeledField.horizontal("Search by Name / ID:", searchField);
 
         topPanel.add(createHeader("Departments"));
         topPanel.add(searchRow);
@@ -129,7 +129,8 @@ public class DepartmentsPage extends AppPage {
 
         String query = currentSearch.trim().toLowerCase();
         for (Department d : allDepts) {
-            if (query.isEmpty() || d.getName().toLowerCase().contains(query)) {
+            if (query.isEmpty() || d.getName().toLowerCase().contains(query)
+                    || d.getID().toLowerCase().contains(query)) {
                 filtered.add(d);
             }
         }
